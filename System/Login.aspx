@@ -59,7 +59,7 @@
                             </div>
                             <br />
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="	glyphicon glyphicon-asterisk"></i>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i>
                                 </span>
                                 <input type="password" class="form-control" id="inputPassword" oninput="JudgePwdText(this)"
                                     placeholder="请输入密码" required />
