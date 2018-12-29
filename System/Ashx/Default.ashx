@@ -3,13 +3,17 @@
 using System;
 using System.Web;
 using System.Data.OleDb;
+using System.Data;
+using System.Text;
 using LitJson;
+using System.Web.SessionState;
 
 
 public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionState
 {
-    
-    public void ProcessRequest (HttpContext context) {
+
+    public void ProcessRequest(HttpContext context)
+    {
         context.Response.ContentType = "text/json";
         //获取页面传进来的json参数数据
         string model = context.Request.Params["data"];
@@ -17,13 +21,19 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
         JsonData jsonData = JsonMapper.ToObject(model);
         string webAction = jsonData["action"].ToString();
         //判断使用的方法是否是登录
-        switch (webAction) 
+        switch (webAction)
         {
             case "loginIn":
                 GetLoginResult(context, jsonData);
                 break;
             case "logout":
                 Logout(context);
+                break;
+            case "menu":
+                GetMenuHtml(context);
+                break;
+            case "menu2":
+                GetMenu2Html(context);
                 break;
         }
     }
@@ -83,7 +93,7 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
         //生产json数据，输出
         result = JsonMapper.ToJson(err);
         context.Response.Write(result);
-    } 
+    }
     #endregion
 
 
@@ -107,9 +117,153 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
         context.Response.Write(result);
     }
     #endregion
+
+    #region 导航栏menu的html字符串
+    /// <summary>
+    /// 导航栏menu的html字符串
+    /// </summary>
+    /// <param name="context"></param>
+    protected void GetMenuHtml(HttpContext context)
+    {
+        context.Response.ContentType = "text/plain";
+        string strSql = "select * from news_class where id<>1 order by orders asc,id asc";
+        DataTable dt = GB.AccessbHelper.ExecuteDataTable(strSql);
+        DataRow[] drs = dt.Select(" big_id =0");
+        StringBuilder sb = new StringBuilder();
+        foreach (DataRow row in drs)
+        {
+            sb.Append(@"<li><a href='#" + row["id"] + "' class='nav-header collapsed' data-toggle='collapse'>");
+            sb.Append(row["sort_name"]);
+            sb.Append(@"<span class='pull-right glyphicon glyphicon-chevron-down'></span></a>");
+            string parentId = row["id"].ToString();
+            DataRow[] drow = dt.Select(" big_id =" + parentId);
+            if (drow.Length > 0)
+            {
+                GetTreeMenu(dt, drow, parentId, sb);
+            }
+            else
+            {
+                sb.Append(@"<ul id='"+parentId+"' class='nav nav-list collapse secondmenu' style='height: 0px;'>");
+                sb.Append("<li><a href='#'>添加信息</a></li>");//icon-edit
+                sb.Append("<li><a href='#'>列表信息</a></li>");//icon-list
+                sb.Append("</ul>");
+            }
+            sb.Append("</li>");
+        }
+
+        context.Response.Write(sb.ToString());
+    }
+
+    /// <summary>
+    /// 递归，绑定导航栏tree结果数据
+    /// </summary>
+    /// <param name="dt"></param>
+    /// <param name="drs"></param>
+    /// <param name="parentId"></param>
+    /// <param name="sb"></param>
+    protected void GetTreeMenu(DataTable dt, DataRow[] drs, string parentId, StringBuilder sb)
+    {
+        sb.Append("<ul id='" + parentId + "' class='nav nav-list collapse secondmenu' style='height: 0px;'>");
+        foreach (DataRow row in drs)
+        {
+            sb.Append("<li>");
+            sb.Append("<a href='#" + row["id"] + "' class='nav-header collapsed' data-toggle='collapse'>");
+            sb.Append(row["sort_name"].ToString());
+            sb.Append("<span class='pull-right glyphicon glyphicon-chevron-down'></span></a>");
+            parentId = row["id"].ToString();
+            DataRow[] drow = dt.Select(" big_id =" + parentId);
+            if (drow.Length > 0)
+            {
+                GetTreeMenu(dt, drow, parentId, sb);
+            }
+            else
+            {
+                sb.Append("<ul id='" + parentId + "' class='nav nav-list collapse thirdmenu' style='height: 0px;'>");
+                sb.Append("<li><a href='#'>添加信息</a></li>");
+                sb.Append("<li><a href='#'>列表信息</a></li>");
+                sb.Append("</ul>");
+            }
+            sb.Append("</li>");
+        }
+        sb.Append("</ul>");
+    } 
+    #endregion
+
+    #region 导航栏menu的html字符串 方法二
+    /// <summary>
+    /// 导航栏menu的html字符串 方法二
+    /// </summary>
+    /// <param name="context"></param>
+    protected void GetMenu2Html(HttpContext context)
+    {
+        context.Response.ContentType = "text/plain";
+        string strSql = "select * from news_class where id<>1 order by orders asc,id asc";
+        DataTable dt = GB.AccessbHelper.ExecuteDataTable(strSql);
+        DataRow[] drs = dt.Select(" big_id =0");
+        StringBuilder sb = new StringBuilder();
+        foreach (DataRow row in drs)
+        {
+            sb.Append(@"<li><a href='#'>");
+            sb.Append(row["sort_name"]);
+            sb.Append(@"<span class='fa arrow'></span></a>");
+            string parentId = row["id"].ToString();
+            DataRow[] drow = dt.Select(" big_id =" + parentId);
+            if (drow.Length > 0)
+            {
+                GetTreeMenu2(dt, drow, parentId, sb);
+            }
+            else
+            {
+                sb.Append(@"<ul>");
+                sb.Append("<li><a href='#'>添加信息</a></li>");//icon-edit
+                sb.Append("<li><a href='#'>列表信息</a></li>");//icon-list
+                sb.Append("</ul>");
+            }
+            sb.Append("</li>");
+        }
+
+        context.Response.Write(sb.ToString());
+    }
+
+    /// <summary>
+    /// 递归，绑定导航栏tree结果数据
+    /// </summary>
+    /// <param name="dt"></param>
+    /// <param name="drs"></param>
+    /// <param name="parentId"></param>
+    /// <param name="sb"></param>
+    protected void GetTreeMenu2(DataTable dt, DataRow[] drs, string parentId, StringBuilder sb)
+    {
+        sb.Append("<ul>");
+        foreach (DataRow row in drs)
+        {
+            sb.Append("<li>");
+            sb.Append("<a href='#'>");
+            sb.Append(row["sort_name"].ToString());
+            sb.Append("<span class='fa plus-times'></span></a>");
+            parentId = row["id"].ToString();
+            DataRow[] drow = dt.Select(" big_id =" + parentId);
+            if (drow.Length > 0)
+            {
+                GetTreeMenu(dt, drow, parentId, sb);
+            }
+            else
+            {
+                sb.Append("<ul>");
+                sb.Append("<li><a href='#'>添加信息</a></li>");
+                sb.Append("<li><a href='#'>列表信息</a></li>");
+                sb.Append("</ul>");
+            }
+            sb.Append("</li>");
+        }
+        sb.Append("</ul>");
+    }  
+    #endregion
     
-    public bool IsReusable {
-        get {
+    public bool IsReusable
+    {
+        get
+        {
             return false;
         }
     }
