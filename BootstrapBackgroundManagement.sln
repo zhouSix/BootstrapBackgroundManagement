@@ -1,18 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BootstrapBackgroundManagement", ".", "{352E437F-4FBE-442C-86EB-4F16A9798A2F}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BootstrapBackgroundManagement", ".", "{25773162-4F3E-4F58-8E28-3A84260D2283}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv2.0"
 		Debug.AspNetCompiler.VirtualPath = "/BootstrapBackgroundManagement"
-		Debug.AspNetCompiler.PhysicalPath = "..\BootstrapBackgroundManagement\"
+		Debug.AspNetCompiler.PhysicalPath = "G:\GitHub\BootstrapManage\BootstrapBackgroundManagement\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\BootstrapBackgroundManagement\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/BootstrapBackgroundManagement"
-		Release.AspNetCompiler.PhysicalPath = "..\BootstrapBackgroundManagement\"
+		Release.AspNetCompiler.PhysicalPath = "G:\GitHub\BootstrapManage\BootstrapBackgroundManagement\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\BootstrapBackgroundManagement\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
@@ -26,8 +26,8 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{352E437F-4FBE-442C-86EB-4F16A9798A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{352E437F-4FBE-442C-86EB-4F16A9798A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25773162-4F3E-4F58-8E28-3A84260D2283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25773162-4F3E-4F58-8E28-3A84260D2283}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

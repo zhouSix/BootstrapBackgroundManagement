@@ -7,29 +7,72 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <title>亿普格网站后台管理系统</title>
-    //jquery的js引入
+    <%--jquery的js引入--%>
     <script src="js/jquery-3.3.1.min.js" type="text/javascript"></script>
-    //font-awesome的css引入
+    <%--font-awesome的css引入 字体样式和图标--%>
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    //bootstrap的js和css引入
+    <%--bootstrap的js和css引入--%>
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <script src="bootstrap/js/bootstrap.js" type="text/javascript"></script>
-    //holder的js引入
+    <%-- holder的js引入  图片占位符插件--%>
     <script src="js/holder.js" type="text/javascript"></script>
-    //sweetalert的js和css引入，漂亮的弹窗
+    <%--sweetalert的js和css引入，漂亮的弹窗--%>
     <script src="sweetalert/js/sweetalert2.js" type="text/javascript"></script>
     <link href="sweetalert/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-    //metisMenu的js和css引入，左侧menu导航栏
+    <%--metisMenu的js和css引入，左侧menu导航栏--%>
     <link href="metisMenu/css/metisMenu.min.css" rel="stylesheet" type="text/css" />
     <link href="metisMenu/css/demo.css" rel="stylesheet" type="text/css" />
     <script src="metisMenu/js/metisMenu.js" type="text/javascript"></script>
+    <style type="text/css">
+        #content
+        {
+            -webkit-transition: width 0.3s ease;
+            -moz-transition: width 0.3s ease;
+            -o-transition: width 0.3s ease;
+            transition: width 0.3s ease;
+        }
+        #sidebar
+        {
+            -webkit-transition: margin 0.3s ease;
+            -moz-transition: margin 0.3s ease;
+            -o-transition: margin 0.3s ease;
+            transition: margin 0.3s ease;
+        }
+        #row-main
+        {
+            overflow-x: hidden; /* necessary to hide collapsed sidebar */
+        }
+        .collapsed
+        {
+            display: none; /* hide it for small displays */
+        }
+    </style>
+        <script type="text/javascript" language="javascript">
+            function setTime() {
+                var currentTime;
+                if ($("#check_hours").is(':checked')) {
+                    currentTime = (new Date()).toLocaleString('chinese', { hour12: false });
+                }
+                else {
+                    currentTime = (new Date()).toLocaleString();
+                }
+                document.getElementById("htmer_time").innerHTML = currentTime;
+            }
 
+            function ChangeHours() {
+                setTime();
+            }
+
+            setInterval(setTime, 1000);
+
+    </script>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
-    <nav class="nav navbar-default navbar-fixed-top" role="navigation" style="background-color: #3B3B3B;">
-    <div class="container-fluid">
+    <nav class="nav navbar-default navbar-fixed-top" role="navigation" style="background-color: #3B3B3B;
+        position: relative;">
+    <div class="container-fluid" style="margin-top:2px;">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
                 <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar">
@@ -53,9 +96,9 @@
         </div>
     </div>
     </nav>
-    <div class="container-fluid" style="padding-top: 30px; background-color: white;">
-        <div class="row">
-            <div class="col-sm-2" style="text-align: center; padding: 0px;">
+    <div class="container-fluid" style="background-color: white;">
+        <div class="row" id="row-main">
+            <div class="col-sm-2" style="text-align: center; padding: 0px;" id="sidebar">
                 <div class="clearfix">
                     <aside class="sidebar">
                         <nav class="sidebar-nav">
@@ -87,12 +130,47 @@
                     </aside>
                 </div>
             </div>
-            <div class="col-sm-10" style="padding: 0px;">
-                <div style="width: 8px;min-height: 600px;vertical-align:middle; background-color: #3b3b3b;  float: left;padding-top:20%;">
-                    <span class="glyphicon glyphicon-chevron-left" style="color: white;"></span>
+            <div class="col-sm-10" style="padding: 0px; background-color: White;" id="content">
+                <div style="width: 8px; min-height: 700px; cursor: pointer; vertical-align: middle;
+                    background-color: #3b3b3b; float: left; padding-top: 20%;" onclick="foldLeftMenu()">
+                    <span id="direction" class="glyphicon glyphicon-chevron-left" style="color: white;">
+                    </span>
                     <%--.glyphicon .glyphicon-chevron-right--%>
                 </div>
-                主窗口
+                <div class="panel panel-default" style="margin-left: 8px; background-color: #f5f5f5;">
+                    <table class="table">
+                        <tr>
+                            <th class="navbar-left" style="padding: 0px; line-height: 36px; padding-left: 10px;">
+                                <i class="glyphicon glyphicon-time">当前时间：</i><label style="width: 170px;"><span id="htmer_time"
+                                    style="color: Red;"></span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <div id="check_hours" class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-info active">
+                                        <input type="radio" name="options" id="option1" value="1">
+                                        12小时
+                                    </label>
+                                    <label class="btn btn-info">
+                                        <input type="radio" name="options" id="option2" value="2">
+                                        24小时
+                                    </label>
+                                </div>
+                            </th>
+                            <th style="padding: 0px;">
+                                <form class="navbar-form navbar-right" action="#" method="post" style="margin-top: 5px;
+                                margin-bottom: 5px;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="搜索" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button">
+                                            <i class="glyphicon glyphicon-search" style="height: 20px; line-height: 20px;"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                </form>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -146,6 +224,12 @@
                     //                    alert(textStatus);
                 }
             });
+        }
+
+        function foldLeftMenu() {
+            $("#sidebar").toggleClass("collapsed");
+            $("#content").toggleClass("col-sm-12 col-sm-9");
+            $("#direction").toggleClass("glyphicon-chevron-right");
         }
     </script>
 </body>
