@@ -35,6 +35,9 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
             case "menu2":
                 GetMenu2Html(context);
                 break;
+            case "serviceInfo":
+                GetServiceInfo(context);
+                break;
         }
     }
 
@@ -258,6 +261,27 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
         }
         sb.Append("</ul>");
     }  
+    #endregion
+
+    #region 得到服务器信息
+    /// <summary>
+    /// 得到服务器信息
+    /// </summary>
+    protected void GetServiceInfo(HttpContext context)
+    {
+        ServerInfo serInfo = new ServerInfo();
+        serInfo.SerName = context.Server.MachineName;
+        serInfo.SerIp = context.Request.ServerVariables["LOCAL_ADDR"].ToString();
+        serInfo.SerFrame = Environment.Version.ToString();
+        serInfo.SerSystem = Environment.OSVersion.ToString();
+        serInfo.SerEnvir = context.Request.ServerVariables["SERVER_SOFTWARE"].ToString();
+        serInfo.SerPort = context.Request.ServerVariables["SERVER_PORT"].ToString();
+        serInfo.SerPath = context.Request.ServerVariables["APPL_PHYSICAL_PATH"].ToString();
+        serInfo.SerHttp = context.Request.ServerVariables["HTTPS"].ToString();
+        serInfo.SerSessionCount = context.Session.Keys.Count.ToString();
+        string result = JsonMapper.ToJson(serInfo);
+        context.Response.Write(result);
+    }
     #endregion
     
     public bool IsReusable

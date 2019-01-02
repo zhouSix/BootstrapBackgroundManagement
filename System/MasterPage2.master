@@ -23,6 +23,10 @@
     <link href="metisMenu/css/metisMenu.min.css" rel="stylesheet" type="text/css" />
     <link href="metisMenu/css/demo.css" rel="stylesheet" type="text/css" />
     <script src="metisMenu/js/metisMenu.js" type="text/javascript"></script>
+    <%--Tab的js和css引入，实现tabPage页面的功能--%>
+    <link href="Tab/css/bootstrap-tab.css" rel="stylesheet" type="text/css" />
+    <script src="Tab/js/bootstrap-tab.js" type="text/javascript"></script>
+    <%--左侧菜单栏折叠使用的样式--%>
     <style type="text/css">
         #content
         {
@@ -46,24 +50,13 @@
         {
             display: none; /* hide it for small displays */
         }
+        .green
+        {
+            color: #69aa46 !important;
+        }
     </style>
-        <script type="text/javascript" language="javascript">
-            function setTime() {
-                var currentTime;
-                if ($("#check_hours").is(':checked')) {
-                    currentTime = (new Date()).toLocaleString('chinese', { hour12: false });
-                }
-                else {
-                    currentTime = (new Date()).toLocaleString();
-                }
-                document.getElementById("htmer_time").innerHTML = currentTime;
-            }
-
-            function ChangeHours() {
-                setTime();
-            }
-
-            setInterval(setTime, 1000);
+    <script type="text/javascript" language="javascript">
+           
 
     </script>
     <asp:ContentPlaceHolder ID="head" runat="server">
@@ -104,14 +97,14 @@
                         <nav class="sidebar-nav">
                             <ul id="menu">
                                 <li class="active" style="border:0px solid #cdcdcd;background: #4c4c4c;">
-                                    <a href="#" style="font-size: 18px;font-weight:bold;line-height: 50px;min-height:50px;" >
+                                    <a href="Default2.aspx" style="font-size: 18px;font-weight:bold;line-height: 50px;min-height:50px;" >
                                         <i class="glyphicon glyphicon-th-large">控制台 </i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">系统管理<span class="fa arrow"></span></a>
+                                    <a href="javascript:void(0)">系统管理<span class="fa arrow"></span></a>
                                     <ul>
-                                        <li><a href="#">网站参数</a></li>
+                                        <li onclick="AddTab(this)"><a href="javascript:void(0)">网站参数</a></li>
                                         <li><a href="#">频道列表</a></li>
                                         <li><a href="#">管理员列表</a></li>
                                         <li><a href="#">首页页面设置</a></li>
@@ -137,7 +130,8 @@
                     </span>
                     <%--.glyphicon .glyphicon-chevron-right--%>
                 </div>
-                <div class="panel panel-default" style="margin-left: 8px; background-color: #f5f5f5;">
+                <div class="panel panel-default" style="margin-left: 8px; background-color: #f5f5f5;
+                    margin-bottom: 0px;">
                     <table class="table">
                         <tr>
                             <th class="navbar-left" style="padding: 0px; line-height: 36px; padding-left: 10px;">
@@ -145,11 +139,11 @@
                                     style="color: Red;"></span></label>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div id="check_hours" class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-info active">
+                                    <label class="btn btn-info active" id="btnTwelve" onclick="ChangeHours()">
                                         <input type="radio" name="options" id="option1" value="1">
                                         12小时
                                     </label>
-                                    <label class="btn btn-info">
+                                    <label class="btn btn-info" id="btnTwentyfour" onclick="ChangeHours()">
                                         <input type="radio" name="options" id="option2" value="2">
                                         24小时
                                     </label>
@@ -171,14 +165,15 @@
                         </tr>
                     </table>
                 </div>
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
             </div>
         </div>
     </div>
-    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-    </asp:ContentPlaceHolder>
     <script src="js/newalert.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            //页面加载时获取左侧菜单栏的html数据，并展示出来
             var model = new Object();
             model.action = "menu2";
             //将登陆的用户信息转换成json数据
@@ -202,8 +197,25 @@
                 }
             });
         });
+        //根据radio button 的设置，选择显示时间的12制或24小时制
+        function setTime() {
+            var currentTime;
+            if (!$("#btnTwelve").hasClass('active')) {
+                currentTime = (new Date()).toLocaleString('chinese', { hour12: false });
+            }
+            else {
+                currentTime = (new Date()).toLocaleString();
+            }
+            document.getElementById("htmer_time").innerHTML = currentTime;
+        }
+        //radio button 的click事件
+        function ChangeHours() {
+            setTime();
+        }
+        //设置1s一次循环
+        setInterval(setTime, 1000);
 
-
+        //退出系统
         function Logout() {
             var model = new Object();
             model.action = "logout";
@@ -226,6 +238,7 @@
             });
         }
 
+        //中间竖杠点击，左侧menu折叠，隐藏显示的click事件
         function foldLeftMenu() {
             $("#sidebar").toggleClass("collapsed");
             $("#content").toggleClass("col-sm-12 col-sm-9");

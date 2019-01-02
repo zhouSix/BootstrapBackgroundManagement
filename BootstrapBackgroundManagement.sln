@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BootstrapBackgroundManagement", ".", "{25773162-4F3E-4F58-8E28-3A84260D2283}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BootstrapBackgroundManagement", ".", "{5AD726FB-05A6-452D-88E5-2894E6246166}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv2.0"
 		Debug.AspNetCompiler.VirtualPath = "/BootstrapBackgroundManagement"
@@ -26,8 +26,8 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{25773162-4F3E-4F58-8E28-3A84260D2283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25773162-4F3E-4F58-8E28-3A84260D2283}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD726FB-05A6-452D-88E5-2894E6246166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD726FB-05A6-452D-88E5-2894E6246166}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
