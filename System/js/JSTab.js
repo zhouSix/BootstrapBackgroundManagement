@@ -2,8 +2,7 @@
     data: [{
         id: 'home',
         text: '控制台',
-        url: "ControlPanel.aspx",
-        closeable: true
+        url: "ControlPanel.aspx"
     }],
     showIndex: 0,
     loadAll: false

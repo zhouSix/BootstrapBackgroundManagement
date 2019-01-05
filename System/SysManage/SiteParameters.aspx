@@ -64,7 +64,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default">
+                    <button type="button" class="btn btn-primary" onclick="SaveWebInfo()">
                         确认保存</button>
                 </div>
             </div>
@@ -73,61 +73,76 @@
     </div>
     <script src="../js/newalert.js" type="text/javascript"></script>
     <script type="text/javascript">
+        //页面加载时，加载页面数据
         jQuery(function ($) {
+            loadSiteParamInfo();
+        });
 
-            //服务器信息
-            var action = "LoadWebParamInfo";
-            //加载首页服务器信息
+        //获取页面数据并进行展示
+        function loadSiteParamInfo() {
+            var model = new Object();
+            //网站参数信息
+            model.action = "loadSiteParamInfo";
+            //将网站参数信息转换成json数据
+            var siteParam = JSON.stringify(model);
+            //加载网站参数信息
             $.ajax({
                 type: "post",
-                url: "/newsbackManage/system/WebSystem/SystemManage.ashx",
-                data: { "action": action },
+                async: false,
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": siteParam },
                 dataType: "json",
                 success: function (data) {
                     if (data.WebName != "") {
-                        $("#webTitle").val(data.WebName);
-                        $("#webKeyword").val(data.WebKey);
-                        $("#webDescribe").val(data.WebDescribe);
-                        $("#editor1").html(data.WebCopyRight);
+                        $("#txtTitle").val(data.WebName);
+                        $("#txtKey").val(data.WebKey);
+                        $("#txtDescript").val(data.WebDescribe);
+                        $('#txtRightInfo').summernote('code', data.WebCopyRight);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                    window.parent.window.$.addtabs.close('#SiteParameters');
+
                     //                    alert(XMLHttpRequest.status);
                     //                    alert(XMLHttpRequest.readyState);
                     //                    alert(textStatus);
                 }
             });
+         }
 
-        });
-
-        var action = "SaveWebParamInfo"
+        //
         function SaveWebInfo() {
             var obj = new Object();
-            obj.action = action;
-            obj.WebName = $("#webTitle").val();
-            obj.WebKey = $("#webKeyword").val();
-            obj.WebDescribe = $("#webDescribe").val();
-            obj.WebCopyRight = $("#editor1").html();
+            obj.action = "saveSiteParamInfo";
+            obj.WebName = $("#txtTitle").val();
+            obj.WebKey = $("#txtKey").val();
+            obj.WebDescribe = $("#txtDescript").val();
+            obj.WebCopyRight = $('#txtRightInfo').summernote('code');
 
             //将网站参数信息转换成json数据
             var webObj = JSON.stringify(obj);
             //提交网站参数，进行保存
             $.ajax({
                 type: "post",
-                url: "/newsbackManage/system/WebSystem/SystemManage.ashx",
-                data: { "webInfo": webObj },
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": webObj },
                 dataType: "json",
                 success: function (data) {
                     if (data.ErrorCode == "0") {
-                        alertDialog("修改成功!", "ok");
+                        pageAlert("操作成功", "保存成功!", "success");
+                        window.parent.window.$.addtabs.close('#SiteParameters');
                     } else {
                         alertDialog(data.ErrorMsg, "error");
                         pageAlert("操作失败", data.ErrorMsg, "error");
                     }
+                    //重新加载数据
+                    //loadSiteParamInfo();
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                    //重新加载数据
+                    loadSiteParamInfo();
                     //                    alert(XMLHttpRequest.status);
                     //                    alert(XMLHttpRequest.readyState);
                     //                    alert(textStatus);
