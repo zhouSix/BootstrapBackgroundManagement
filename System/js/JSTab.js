@@ -8,5 +8,11 @@
     loadAll: false
 })
 function AddNewTab(obj, tabId, pageId) {
-    $("#tabContainer").data("tabs").addTab({ id: tabId, text: obj.innerText, closeable: true, url: 'SysManage/SiteParameters.aspx' })
+    var tabUrl = "";
+    if (tabId == "SiteParameters")
+        tabUrl = "SysManage/SiteParameters.aspx";
+    else if (tabId == "SysChannelList")
+        tabUrl = "SysManage/SysChannelList.aspx";
+
+    $("#tabContainer").data("tabs").addTab({ id: tabId, text: obj.innerText, closeable: true, url: tabUrl })
 }

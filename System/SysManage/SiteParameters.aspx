@@ -88,7 +88,7 @@
             //加载网站参数信息
             $.ajax({
                 type: "post",
-                async: false,
+//                async: false,
                 url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
                 data: { "data": siteParam },
                 dataType: "json",
@@ -102,7 +102,6 @@
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
-                    window.parent.window.$.addtabs.close('#SiteParameters');
 
                     //                    alert(XMLHttpRequest.status);
                     //                    alert(XMLHttpRequest.readyState);
@@ -131,13 +130,12 @@
                 success: function (data) {
                     if (data.ErrorCode == "0") {
                         pageAlert("操作成功", "保存成功!", "success");
-                        window.parent.window.$.addtabs.close('#SiteParameters');
                     } else {
                         alertDialog(data.ErrorMsg, "error");
                         pageAlert("操作失败", data.ErrorMsg, "error");
                     }
                     //重新加载数据
-                    //loadSiteParamInfo();
+                    loadSiteParamInfo();
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");

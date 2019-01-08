@@ -56,6 +56,5 @@
   */
  function checkTabIsExists(tabMainName, tabName){
      var tab = $("#"+tabMainName+" > #tab_li_"+tabName);
-     //console.log(tab.length)
      return tab.length > 0;
  }
