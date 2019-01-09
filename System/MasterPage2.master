@@ -34,7 +34,7 @@
     <link href="bootstrapTable/bootstrap-table.css" rel="stylesheet" type="text/css" />
     <script src="bootstrapTable/bootstrap-table.js" type="text/javascript"></script>
     <script src="bootstrapTable/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
-
+    <script src="js/JSModal.js" type="text/javascript"></script>
     <%--左侧菜单栏折叠使用的样式--%>
     <style type="text/css">
         #content

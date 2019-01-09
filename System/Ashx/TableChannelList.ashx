@@ -26,7 +26,7 @@ public class TableChannelList : IHttpHandler {
     /// <param name="context"></param>
     protected void GetChannelListJson(HttpContext context) 
     {
-        string strSql = "select id,sort_name from news_class where big_id=0 and istop=0 order by orders asc,id asc";
+        string strSql = "select id,sort_name,big_id from news_class where big_id=0 and istop=0 order by orders asc,id asc";
         DataTable dt = GB.AccessbHelper.ExecuteDataTable(strSql);
         string resultJson = JsonHelper.GetJsonByDataTable(dt, "total", "rows");
         context.Response.Write(resultJson);
