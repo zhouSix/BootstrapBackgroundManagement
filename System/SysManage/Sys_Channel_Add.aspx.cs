@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class System_SysManage_Sys_Channel_Edit : System.Web.UI.Page
+public partial class System_SysManage_Sys_Channel_Add : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {

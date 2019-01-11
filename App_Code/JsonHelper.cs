@@ -184,6 +184,37 @@ public class JsonHelper
         jsonBuilder.Append("}");
         return jsonBuilder.ToString();
     }
+    /// <summary>   
+    /// PageDatatable转换为Json   
+    /// </summary>   
+    /// <param name="table">Datatable对象</param>   
+    /// <returns>Json字符串</returns>   
+    public static string GetJsonByPageDataTable(DataTable dtZong,DataTable dtPage, string totalProperty, string root)
+    {
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.Append("{\"" + totalProperty + "\":\"" + dtZong.Rows.Count + "\",");
+        jsonBuilder.Append("\"");
+        jsonBuilder.Append(root);
+        jsonBuilder.Append("\":[");
+        for (int i = 0; i < dtPage.Rows.Count; i++)
+        {
+            jsonBuilder.Append("{");
+            for (int j = 0; j < dtPage.Columns.Count; j++)
+            {
+                jsonBuilder.Append("\"");
+                jsonBuilder.Append(dtPage.Columns[j].ColumnName);
+                jsonBuilder.Append("\":\"");
+                jsonBuilder.Append(dtPage.Rows[i][j].ToString());
+                jsonBuilder.Append("\",");
+            }
+            jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
+            jsonBuilder.Append("},");
+        }
+        jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
+        jsonBuilder.Append("]");
+        jsonBuilder.Append("}");
+        return jsonBuilder.ToString();
+    }
     /// <summary>  
     /// 格式化字符型、日期型、布尔型  
     /// add yuangang by 2015-05-19

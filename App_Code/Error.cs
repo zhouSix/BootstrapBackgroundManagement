@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 
+#region 错误信息报文
 /// <summary>
 /// 错误信息报文
 /// </summary>
@@ -56,8 +57,10 @@ public class Error
             this.errors = value;
         }
     }
-}
+} 
+#endregion
 
+#region 服务器信息
 /// <summary>
 /// 服务器信息
 /// </summary>
@@ -157,11 +160,14 @@ public class ServerInfo
     }
 }
 
+#endregion
+
+#region 网站参数信息
 /// <summary>
 /// 网站参数信息
 /// </summary>
 [Serializable]
-public class WebParamInfo 
+public class WebParamInfo
 {
     /// <summary>
     /// 网站标题
@@ -207,13 +213,15 @@ public class WebParamInfo
         set { _webCopyRight = value; }
     }
 
-}
+} 
+#endregion
 
+#region 导航栏频道信息
 /// <summary>
 /// 导航栏频道信息
 /// </summary>
 [Serializable]
-public class News_Class 
+public class News_Class
 {
     /// <summary>
     /// id
@@ -248,6 +256,15 @@ public class News_Class
         set { _big_id = value; }
     }
 
+    /// <summary>
+    /// 父级名称
+    /// </summary>
+    private string _big_name;
+    public string big_name
+    {
+        get { return _big_name; }
+        set { _big_name = value; }
+    }
     /// <summary>
     /// 分类路径 格式为：（,0,1）-英文逗号+数字+英文逗号+数字+...
     /// </summary>
@@ -368,4 +385,5 @@ public class News_Class
         get { return _type; }
         set { _type = value; }
     }
-}
+} 
+#endregion

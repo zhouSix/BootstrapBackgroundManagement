@@ -1,5 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Sys_Channel_Edit.aspx.cs"
-    Inherits="System_SysManage_Sys_Channel_Edit" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Sys_Channel_Add.aspx.cs"
+    Inherits="System_SysManage_Sys_Channel_Add" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -74,7 +74,7 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">
             关闭
         </button>
-        <button type="button" class="btn btn-primary" onclick="AddCategory()">
+        <button type="button" name="btnlvlSave" class="btn btn-primary" onclick="AddCategory()">
             添加分类
         </button>
     </div>
