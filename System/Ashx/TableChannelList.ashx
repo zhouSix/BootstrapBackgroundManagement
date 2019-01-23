@@ -15,6 +15,10 @@ public class TableChannelList : IHttpHandler {
             case "GetChannelListJson":
                 GetChannelListJson(context);
                 break;
+            case "GetChildChannelListJson":
+                string bigId = context.Request["bigId"].ToString();
+                GetChildChannelListJson(context,bigId);
+                break;
             default:
                 break;
         }
@@ -35,7 +39,20 @@ public class TableChannelList : IHttpHandler {
         string resultJson = JsonHelper.GetJsonByPageDataTable(dtZong, dtPage, "total", "rows");
         context.Response.Write(resultJson);
     }
- 
+
+    /// <summary>
+    /// 获取字频道列表数据
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="bigId"></param>
+    protected void GetChildChannelListJson(HttpContext context,string bigId) 
+    {
+        string strSql = "select id,sort_name,big_id from news_class where big_id="+bigId+" and istop=0 order by orders asc,id asc";
+        DataTable dt = GB.AccessbHelper.ExecuteDataTable(strSql);
+        string resultJson = JsonHelper.GetJsonByDataTable(dt, "total", "rows");
+        context.Response.Write(resultJson);
+    }
+    
     public bool IsReusable {
         get {
             return false;
