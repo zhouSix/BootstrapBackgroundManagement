@@ -180,7 +180,7 @@
                           PromptText(data.ErrorMsg);
                           $("#inputValidateCode").parent(".input-group").removeClass("hidden");
                       } else if (data.ErrorCode == "0") {
-                          window.location.href = "Default.aspx";
+                          window.location.href = "Default1.aspx";
                       }
                   },
                   error: function (XMLHttpRequest, textStatus, errorThrown) {

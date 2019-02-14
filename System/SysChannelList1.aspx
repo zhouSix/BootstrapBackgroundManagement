@@ -1,17 +1,15 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SysChannelList.aspx.cs" Inherits="System_SysManage_SysChannelList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/System/MasterPage.master" AutoEventWireup="true"
+    CodeFile="SysChannelList1.aspx.cs" Inherits="System_SysChannelList1" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css">
         .modal-body table tr td
         {
             line-height: 35px;
         }
     </style>
-</head>
-<body>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <ul class="breadcrumb" style="padding: 0px 0px 0px 24px; margin: 0px; background-color: White;">
         <li>
             <h3>
@@ -183,7 +181,6 @@
             </div>
         </div>
     </div>--%>
-
     <!--静态框   信息删除确认 end-->
     <script type="text/javascript">
 
@@ -274,7 +271,7 @@
                         //通过formatter可以自定义列显示的内容
                         //value：当前field的值，即id
                         //row：当前行的数据
-//                        var a = '<a href="/BootstrapBackgroundManagement/System/SysManage/Sys_Child_Channel_Manage.aspx" data-toggle="modal" data-target="#myManageChildCnl" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-list"></span>管理子频道</a>';
+                        //                        var a = '<a href="/BootstrapBackgroundManagement/System/SysManage/Sys_Child_Channel_Manage.aspx" data-toggle="modal" data-target="#myManageChildCnl" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-list"></span>管理子频道</a>';
                         //                        return a;
                         var a = '<a href="/BootstrapBackgroundManagement/System/SysManage/Sys_Child_Channel_Manage.aspx?Cid=' + value + '&cname=' + row["sort_name"] + '" ><span class="glyphicon glyphicon-list"></span>管理子频道</a>';
                         return a;
@@ -460,90 +457,90 @@
         });
 
         //管理子频道，设置要显示的子频道列表
-//        $('#myManageChildCnl').on('shown.bs.modal', function (event) {
-//            var button = $(event.relatedTarget);
-//            var bigId = button.data('id'); //获取要操作的ID
-//            var catename = button.data('catename');
-//            $('#mdlTitle').text("“" + catename + "”子频道管理");
-//            initChildTable(bigId,bigName);
-//        });
+        //        $('#myManageChildCnl').on('shown.bs.modal', function (event) {
+        //            var button = $(event.relatedTarget);
+        //            var bigId = button.data('id'); //获取要操作的ID
+        //            var catename = button.data('catename');
+        //            $('#mdlTitle').text("“" + catename + "”子频道管理");
+        //            initChildTable(bigId,bigName);
+        //        });
 
-//        function initChildTable(bigId, bigName) {
-//            $('#childTable').bootstrapTable({
-//                url: "/BootstrapBackgroundManagement/System/Ashx/TableChannelList.ashx?action=GetChildChannelListJson&bigId="+bigId,
-//                //请求方法
-//                method: 'get',
-//                //是否显示行间隔色
-//                striped: true,
-//                //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）     
-//                cache: false,
-//                //是否显示分页（*）  
-//                pagination: false,
-//                //是否启用排序  
-//                sortable: false,
-//                //排序方式 
-//                sortOrder: "asc",
-//                //初始化加载第一页，默认第一页
-//                //我设置了这一项，但是貌似没起作用，而且我这默认是0,- -
-//                pageNumber: 1,                       //初始化加载第一页，默认第一页
-//                //每页的记录行数（*）   
-//                pageSize: 10,
-//                //可供选择的每页的行数（*）    
-//                pageList: [10, 20, 30, 40, 50],
-//                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据  
-//                //分页方式：client客户端分页，server服务端分页（*）
-//                sidePagination: "server",
-//                //是否显示搜索
-//                search: false,
-//                //Enable the strict search.    
-//                strictSearch: true,
-//                //Indicate which field is an identity field.
-//                idField: "id",
-//                columns: [{
-//                    field: 'id',
-//                    title: 'ID',
-//                    align: 'center'
-//                }, {
-//                    field: 'sort_name',
-//                    title: '分类名称',
-//                    align: 'center'
-//                }, {
-//                    field: 'big_id',
-//                    title: '新增同级频道',
-//                    align: 'center',
-//                    formatter: function (value, row, index) {
-//                        //通过formatter可以自定义列显示的内容
-//                        //value：当前field的值，即id
-//                        //row：当前行的数据
-//                        var a = '<a href="javascript:void(0);" data-toggle="modal" data-target="#myAddChildZSameCnl" data-id="' + bigId + '" data-catename="' + bigName + '" ><span class="glyphicon glyphicon-plus"></span>新增同级频道</a>';
-//                        return a;
-//                    }
-//                }, {
-//                    field: 'id',
-//                    title: '编辑',
-//                    align: 'center',
-//                    formatter: function (value, row, index) {
-//                        //通过formatter可以自定义列显示的内容
-//                        //value：当前field的值，即id
-//                        //row：当前行的数据
-//                        var a = '<a href="/BootstrapBackgroundManagement/System/SysManage/Sys_Channel_Update.aspx"  data-toggle="modal" data-target="#myUpdateSameLevelCnl" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-pencil"></span>编辑</a>';
-//                        return a;
-//                    }
-//                }, {
-//                    field: 'id',
-//                    title: '删除',
-//                    align: 'center',
-//                    formatter: function (value, row, index) {
-//                        //通过formatter可以自定义列显示的内容
-//                        //value：当前field的值，即id
-//                        //row：当前行的数据
-//                        var a = '<a href="javescript:void(0);" data-toggle="modal" data-target="#myDeleteCnl" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-remove"></span>删除</a>';
-//                        return a;
-//                    }
-//                }],
-//                pagination: true
-//            });
-//         }
+        //        function initChildTable(bigId, bigName) {
+        //            $('#childTable').bootstrapTable({
+        //                url: "/BootstrapBackgroundManagement/System/Ashx/TableChannelList.ashx?action=GetChildChannelListJson&bigId="+bigId,
+        //                //请求方法
+        //                method: 'get',
+        //                //是否显示行间隔色
+        //                striped: true,
+        //                //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）     
+        //                cache: false,
+        //                //是否显示分页（*）  
+        //                pagination: false,
+        //                //是否启用排序  
+        //                sortable: false,
+        //                //排序方式 
+        //                sortOrder: "asc",
+        //                //初始化加载第一页，默认第一页
+        //                //我设置了这一项，但是貌似没起作用，而且我这默认是0,- -
+        //                pageNumber: 1,                       //初始化加载第一页，默认第一页
+        //                //每页的记录行数（*）   
+        //                pageSize: 10,
+        //                //可供选择的每页的行数（*）    
+        //                pageList: [10, 20, 30, 40, 50],
+        //                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据  
+        //                //分页方式：client客户端分页，server服务端分页（*）
+        //                sidePagination: "server",
+        //                //是否显示搜索
+        //                search: false,
+        //                //Enable the strict search.    
+        //                strictSearch: true,
+        //                //Indicate which field is an identity field.
+        //                idField: "id",
+        //                columns: [{
+        //                    field: 'id',
+        //                    title: 'ID',
+        //                    align: 'center'
+        //                }, {
+        //                    field: 'sort_name',
+        //                    title: '分类名称',
+        //                    align: 'center'
+        //                }, {
+        //                    field: 'big_id',
+        //                    title: '新增同级频道',
+        //                    align: 'center',
+        //                    formatter: function (value, row, index) {
+        //                        //通过formatter可以自定义列显示的内容
+        //                        //value：当前field的值，即id
+        //                        //row：当前行的数据
+        //                        var a = '<a href="javascript:void(0);" data-toggle="modal" data-target="#myAddChildZSameCnl" data-id="' + bigId + '" data-catename="' + bigName + '" ><span class="glyphicon glyphicon-plus"></span>新增同级频道</a>';
+        //                        return a;
+        //                    }
+        //                }, {
+        //                    field: 'id',
+        //                    title: '编辑',
+        //                    align: 'center',
+        //                    formatter: function (value, row, index) {
+        //                        //通过formatter可以自定义列显示的内容
+        //                        //value：当前field的值，即id
+        //                        //row：当前行的数据
+        //                        var a = '<a href="/BootstrapBackgroundManagement/System/SysManage/Sys_Channel_Update.aspx"  data-toggle="modal" data-target="#myUpdateSameLevelCnl" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-pencil"></span>编辑</a>';
+        //                        return a;
+        //                    }
+        //                }, {
+        //                    field: 'id',
+        //                    title: '删除',
+        //                    align: 'center',
+        //                    formatter: function (value, row, index) {
+        //                        //通过formatter可以自定义列显示的内容
+        //                        //value：当前field的值，即id
+        //                        //row：当前行的数据
+        //                        var a = '<a href="javescript:void(0);" data-toggle="modal" data-target="#myDeleteCnl" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-remove"></span>删除</a>';
+        //                        return a;
+        //                    }
+        //                }],
+        //                pagination: true
+        //            });
+        //         }
 
 
         //新增频道
@@ -728,10 +725,10 @@
             $(this).removeData("bs.modal");
         });
 
-//        //管理子频道信息，关闭对话框之前移除数据
-//        $("#myManageChildCnl").on("hidden.bs.modal", function () {
-//            $(this).removeData("bs.modal");
-//        });
+        //        //管理子频道信息，关闭对话框之前移除数据
+        //        $("#myManageChildCnl").on("hidden.bs.modal", function () {
+        //            $(this).removeData("bs.modal");
+        //        });
 
         //刷新事件
         function refreshTable() {
@@ -739,5 +736,4 @@
         }
 
     </script>
-</body>
-</html>
+</asp:Content>

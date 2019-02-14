@@ -14,5 +14,6 @@ function AddNewTab(obj, tabId, pageId) {
     else if (tabId == "SysChannelList")
         tabUrl = "SysManage/SysChannelList.aspx";
 
+
     $("#tabContainer").data("tabs").addTab({ id: tabId, text: obj.innerText, closeable: true, url: tabUrl })
 }
