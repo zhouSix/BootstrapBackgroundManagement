@@ -16,7 +16,7 @@
     <ul class="breadcrumb" style="padding: 0px 0px 0px 24px; margin: 0px; background-color: White;">
         <li>
             <h3>
-                <i class="glyphicon glyphicon-home"></i><a href="/BootstrapBackgroundManagement/System/Default2.aspx">
+                <i class="glyphicon glyphicon-home"></i><a href="/BootstrapBackgroundManagement/System/Default1.aspx">
                     首页</a></h3>
         </li>
         <li><b>系统管理</b> </li>

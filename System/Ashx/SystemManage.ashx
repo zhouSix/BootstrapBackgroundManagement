@@ -44,6 +44,9 @@ public class SystemManage : IHttpHandler
             case "delCate":
                 DeleteCategory(context, jsonData);
                 break;
+            case "backToUpChannel":
+                BackToUpChannel(context, jsonData);
+                break;
         }
     }
 
@@ -438,6 +441,56 @@ public class SystemManage : IHttpHandler
         //对象转为json，返回页面
         context.Response.Write(JsonMapper.ToJson(error));
     }
+    #endregion
+
+    #region 根据父级id获取这个频道的父级id
+    /// <summary>
+    /// 根据父级id获取这个频道的父级id
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="jsonData"></param>
+    private void BackToUpChannel(HttpContext context, JsonData jsonData)
+    {
+        //获取页面传递父级id
+        string id = jsonData["Cid"].ToString();
+        //返回信息对象话
+        Error error = new Error();
+        string strSql = "";
+
+        try
+        {
+            //查询父级id
+            strSql = "select big_id from news_class where id =" + id;
+            string bigId = GB.AccessbHelper.ExecuteScalar(strSql).ToString();
+            //返回的为空值则查询失败，否则查询成功
+            if (!string.IsNullOrEmpty(bigId))
+            {
+                string cname = "";
+                if (!bigId.Equals("0"))
+                {
+                    strSql = "select sort_name from news_class where id =" + bigId;
+                    cname = GB.AccessbHelper.ExecuteScalar(strSql).ToString();
+                }
+                //查询成功，返回查询的父级id
+                error.ErrorCode = "0";
+                error.ErrorMsg = bigId + ":" + cname;
+            }
+            else
+            {
+                //查询失败，返回失败提示
+                error.ErrorCode = "1";
+                error.ErrorMsg = "删除失败！";
+            }
+        }
+        catch (Exception ex)
+        {
+            //sql异常，异常原因
+            error.ErrorCode = "1";
+            error.ErrorMsg = ex.Message;
+        }
+        //对象转为json，返回页面
+        context.Response.Write(JsonMapper.ToJson(error));
+    } 
     #endregion
 
     public bool IsReusable
