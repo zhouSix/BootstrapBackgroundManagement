@@ -23,29 +23,35 @@ public class SystemManage : IHttpHandler
         switch (webAction)
         {
             //加载网站参数页面
-            case "loadSiteParamInfo":
+            case "loadSiteParamInfo":    //网站参数加载
                 LoadSiteParamInfo(context);
                 break;
-            case "saveSiteParamInfo":
+            case "saveSiteParamInfo":    //保存网站参数页面的数据
                 SaveSiteParamInfo(context, jsonData);
                 break;
-            case "addTopCnl":
+            case "addTopCnl":           //新增顶级频道
                 AddTopChannel(context, jsonData);
                 break;
-            case "addCate":
+            case "addCate":            //新增子频道
                 AddCategory(context, jsonData);
                 break;
-            case "searchModleById":
+            case "searchModleById":    //通过id查询频道信息
                 SearchModleById(context, jsonData);
                 break;
-            case "updateCate":
+            case "updateCate":        //修改频道
                 UpdateCategory(context, jsonData);
                 break;
-            case "delCate":
+            case "delCate":           //删除频道
                 DeleteCategory(context, jsonData);
                 break;
-            case "backToUpChannel":
+            case "backToUpChannel":    //频道列表返回上一级列表
                 BackToUpChannel(context, jsonData);
+                break;
+            case "AddManager":      //新增管理员
+                AddManager(context, jsonData);
+                break;
+            case "updateManagerPwd":    //修改管理员密码
+                UpdateManagerPwd(context, jsonData);
                 break;
         }
     }
@@ -479,7 +485,106 @@ public class SystemManage : IHttpHandler
             {
                 //查询失败，返回失败提示
                 error.ErrorCode = "1";
-                error.ErrorMsg = "删除失败！";
+                error.ErrorMsg = "查询失败！";
+            }
+        }
+        catch (Exception ex)
+        {
+            //sql异常，异常原因
+            error.ErrorCode = "1";
+            error.ErrorMsg = ex.Message;
+        }
+        //对象转为json，返回页面
+        context.Response.Write(JsonMapper.ToJson(error));
+    } 
+    #endregion
+
+    #region 新增管理员
+    /// <summary>
+    /// 新增管理员
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="jsonData"></param>
+    private void AddManager(HttpContext context, JsonData jsonData)
+    {
+        //获取新增管理员的用户名和密码 
+        string userName = jsonData["userName"].ToString();
+        string userPwd = jsonData["pwd"].ToString();
+        //密码加密
+        userPwd = GB.Encrypt.jiami(userPwd);
+
+        Error error = new Error();
+        int result = 0;
+        string strSql = "";
+
+        try
+        {
+            strSql = "insert into ergyertye346(swtfhuiesyt,dfhrdtqw5,usertype,truename) values(@swtfhuiesyt,@dfhrdtqw5,@usertype,@truename)";
+            OleDbParameter[] param = new OleDbParameter[4];
+            param[0] = new OleDbParameter("@swtfhuiesyt", userName);
+            param[1] = new OleDbParameter("@dfhrdtqw5", userPwd);
+            param[2] = new OleDbParameter("@usertype", "manger");
+            param[3] = new OleDbParameter("@truename", userName);
+            result = GB.AccessbHelper.ExecuteNonQuery(strSql, param);
+            if (result > 0)
+            {
+                //用户新增成功
+                error.ErrorCode = "0";
+            }
+            else
+            {
+                //数据库添加失败
+                error.ErrorCode = "1";
+                error.ErrorMsg = "保存失败！";
+            }
+        }
+        catch (Exception ex)
+        {
+            //sql异常，异常原因
+            error.ErrorCode = "1";
+            error.ErrorMsg = ex.Message;
+        }
+        //对象转为json，返回页面
+        context.Response.Write(JsonMapper.ToJson(error));
+
+    } 
+    #endregion
+
+    #region 修改管理员密码
+    /// <summary>
+    /// 修改管理员密码
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="jsonData"></param>
+    private void UpdateManagerPwd(HttpContext context, JsonData jsonData)
+    {
+        //获取要修改用户的id和密码 
+        string id = jsonData["id"].ToString();
+        string userPwd = jsonData["userPwd"].ToString();
+        //密码加密
+        userPwd = GB.Encrypt.jiami(userPwd);
+
+        Error error = new Error();
+        int result = 0;
+        string strSql = "";
+
+        try
+        {
+            strSql = "update ergyertye346 set dfhrdtqw5=@dfhrdtqw5 where id=@id";
+            OleDbParameter[] param = new OleDbParameter[4];
+            param[0] = new OleDbParameter("@dfhrdtqw5", userPwd);
+            param[1] = new OleDbParameter("@id", id);
+            result = GB.AccessbHelper.ExecuteNonQuery(strSql, param);
+            if (result > 0)
+            {
+                //用户密码修改成功
+                error.ErrorCode = "0";
+            }
+            else
+            {
+                //密码修改失败
+                error.ErrorCode = "1";
+                error.ErrorMsg = "修改失败！";
             }
         }
         catch (Exception ex)
