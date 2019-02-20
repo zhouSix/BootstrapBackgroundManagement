@@ -336,7 +336,6 @@
                     if (data.ErrorCode == "0") {
                         pageAlert("操作成功", "保存成功!", "success");
                     } else {
-                        alertDialog(data.ErrorMsg, "error");
                         pageAlert("操作失败", data.ErrorMsg, "error");
                     }
                     //关闭弹窗
@@ -480,7 +479,6 @@
                     if (data.ErrorCode == "0") {
                         pageAlert("操作成功", "保存成功!", "success");
                     } else {
-                        alertDialog(data.ErrorMsg, "error");
                         pageAlert("操作失败", data.ErrorMsg, "error");
                     }
                     //关闭弹窗
@@ -544,7 +542,6 @@
                     if (data.ErrorCode == "0") {
                         pageAlert("操作成功", "修改成功!", "success");
                     } else {
-                        alertDialog(data.ErrorMsg, "error");
                         pageAlert("操作失败", data.ErrorMsg, "error");
                     }
                     //关闭弹窗
@@ -587,7 +584,6 @@
                     if (data.ErrorCode == "0") {
                         pageAlert("操作成功", "删除成功!", "success");
                     } else {
-                        alertDialog(data.ErrorMsg, "error");
                         pageAlert("操作失败", data.ErrorMsg, "error");
                     }
                     //关闭弹窗
@@ -650,7 +646,6 @@
                             window.location.href = "SysChildChannelList1.aspx?Cid=" + escape(arr[0]) + "&cname=" + escape(arr[1]);
                          }
                     } else {
-                        alertDialog(data.ErrorMsg, "error");
                         pageAlert("操作失败", data.ErrorMsg, "error");
                     }
                 },

@@ -53,6 +53,9 @@ public class SystemManage : IHttpHandler
             case "updateManagerPwd":    //修改管理员密码
                 UpdateManagerPwd(context, jsonData);
                 break;
+            case "deleteManage":        //删除管理员
+                DeleteManage(context, jsonData);
+                break;
         }
     }
 
@@ -571,7 +574,7 @@ public class SystemManage : IHttpHandler
         try
         {
             strSql = "update ergyertye346 set dfhrdtqw5=@dfhrdtqw5 where id=@id";
-            OleDbParameter[] param = new OleDbParameter[4];
+            OleDbParameter[] param = new OleDbParameter[2];
             param[0] = new OleDbParameter("@dfhrdtqw5", userPwd);
             param[1] = new OleDbParameter("@id", id);
             result = GB.AccessbHelper.ExecuteNonQuery(strSql, param);
@@ -597,6 +600,49 @@ public class SystemManage : IHttpHandler
         context.Response.Write(JsonMapper.ToJson(error));
     } 
     #endregion
+
+    #region 删除管理员
+    /// <summary>
+    /// 删除管理员
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="jsonData"></param>
+    private void DeleteManage(HttpContext context, JsonData jsonData)
+    {
+        //获取要删除用户的id
+        string id = jsonData["id"].ToString();
+
+        Error error = new Error();
+        int result = 0;
+        string strSql = "";
+
+        try
+        {
+            strSql = " Delete from ergyertye346 where id="+id;
+            result = GB.AccessbHelper.ExecuteNonQuery(strSql);
+            if (result > 0)
+            {
+                //用户密码修改成功
+                error.ErrorCode = "0";
+            }
+            else
+            {
+                //密码修改失败
+                error.ErrorCode = "1";
+                error.ErrorMsg = "删除失败！";
+            }
+        }
+        catch (Exception ex)
+        {
+            //sql异常，异常原因
+            error.ErrorCode = "1";
+            error.ErrorMsg = ex.Message;
+        }
+        //对象转为json，返回页面
+        context.Response.Write(JsonMapper.ToJson(error));
+    } 
+    #endregion
+    
 
     public bool IsReusable
     {

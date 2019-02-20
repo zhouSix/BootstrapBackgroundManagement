@@ -163,6 +163,35 @@
             </div>
         </div>
     </div>
+    <!-- 模态框（Modal）- 用户信息删除确认-->
+    <div class="modal fade" id="myDeleteUser" tabindex="-1" role="dialog" aria-labelledby="myDeleteUser"
+        aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        提示</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 隐藏需要删除的id -->
+                    <input type="hidden" id="deleteUserId" name="deleteUserId" value="" />
+                    <p>
+                        您确认要删除该条用户信息吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        取消</button>
+                    <button type="button" class="btn btn-primary" onclick="delUser()">
+                        确认</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <script type="text/javascript">
         $(function () {
             initTable();
@@ -219,7 +248,7 @@
                         //通过formatter可以自定义列显示的内容
                         //value：当前field的值，即id
                         //row：当前行的数据
-                        var a = '<a href="javascript:void(0)"  data-toggle="modal" data-target="#myUpdateUserPwd" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-pencil"></span>修改密码</a>';
+                        var a = '<a href="javascript:void(0);"  data-toggle="modal" data-target="#myUpdateUserPwd" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-pencil"></span>修改密码</a>';
                         return a;
                     }
                 }, {
@@ -230,7 +259,7 @@
                         //通过formatter可以自定义列显示的内容
                         //value：当前field的值，即id
                         //row：当前行的数据
-                        var a = '<a href="javescript:void(0);" data-toggle="modal" data-target="#myDeleteCnl" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-remove"></span>删除</a>';
+                        var a = '<a href="javascript:void(0);" data-toggle="modal" data-target="#myDeleteUser" data-id="' + value + '" data-catename="' + row["sort_name"] + '" ><span class="glyphicon glyphicon-remove"></span>删除</a>';
                         return a;
                     }
                 }],
@@ -244,9 +273,9 @@
             $b.after(text);
           }
           //错误提示2
-          function PromptUpdateText(text) {
-            var $b = $('#txtPwd_update').find('button');
-            $('#txtPwd_update').html($b);
+         function PromptUpdateText(text) {
+            var $b = $('#prompt_update').find('button');
+            $('#prompt_update').html($b);
             $b.after(text);
           }
 
@@ -317,7 +346,7 @@
                   $("#prompt_update").show();
                   PromptUpdateText("确认密码不能为空！");
                   }
-                  else if($("#txtPwdConfirm_update").val().length!=$("#txtPwd").val().length)
+                  else if($("#txtPwdConfirm_update").val().length!=$("#txtPwd_update").val().length)
                   {
                     $("#txtPwdConfirm_update").parent(".input-group").addClass("has-error");
                     $("#prompt_update").show();
@@ -411,7 +440,6 @@
                     {
                          pageAlert("操作成功", "保存成功!", "success");
                     } else {
-                        alertDialog(data.ErrorMsg, "error");
                         pageAlert("操作失败", data.ErrorMsg, "error");
                     }
                     //关闭弹窗
@@ -442,7 +470,7 @@
                   PromptUpdateText("确认密码不能为空！");
                   return;
                   }
-                  else if($("#txtPwdConfirm_update").val().length!=$("#txtPwd").val().length)
+                  else if($("#txtPwdConfirm_update").val().length!=$("#txtPwd_update").val().length)
                   {
                     $("#txtPwdConfirm_update").parent(".input-group").addClass("has-error");
                     $("#prompt_update").show();
@@ -480,11 +508,42 @@
                     {
                          pageAlert("修改成功", "修改成功!", "success");
                     } else {
-                        alertDialog(data.ErrorMsg, "error");
                         pageAlert("修改失败", data.ErrorMsg, "error");
                     }
                     //关闭弹窗
                     $('#myUpdateUserPwd').modal('hide');
+                    refreshTable();
+                  },
+                  error: function (XMLHttpRequest, textStatus, errorThrown) {
+                      PromptUpdateText("网络超时，请重试！");
+                  }
+               });
+        }
+
+        //删除用户信息
+        function delUser()
+        {
+            var model = new Object();
+            model.action = "deleteManage";
+            model.id=$("#deleteUserId").val();
+            //将要修改用户信息转换成json数据
+            var userInfo = JSON.stringify(model);
+             //ajax数据传输到ashx中的登录一般处理程序中
+              $.ajax({
+                  type: "post",
+                  url: "Ashx/SystemManage.ashx",
+                  data: { "data": userInfo },
+                  dataType: "json",
+                  success: function (data) 
+                  {
+                    if (data.ErrorCode == "0") 
+                    {
+                         pageAlert("删除成功", "删除成功!", "success");
+                    } else {
+                        pageAlert("删除失败", data.ErrorMsg, "error");
+                    }
+                    //关闭弹窗
+                    $('#myDeleteUser').modal('hide');
                     refreshTable();
                   },
                   error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -504,6 +563,14 @@
              var button = $(event.relatedTarget);
              var id = button.data('id'); //获取要操作的ID
              $('#hidId_update').val(id);  //赋值要修改的Id
+
+        });
+
+        //删除用户，设置要删除用户的隐藏id
+         $('#myDeleteUser').on('show.bs.modal', function (event) {
+             var button = $(event.relatedTarget);
+             var id = button.data('id'); //获取要操作的ID
+             $('#deleteUserId').val(id);  //赋值要删除的Id
 
         });
 
