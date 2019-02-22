@@ -8,7 +8,7 @@
     <title>亿普格网站后台管理系统</title>
     <%--jquery的js引入--%>
     <script src="js/jquery-3.3.1.min.js" type="text/javascript"></script>
-    <script src="popper/dist/umd/popper.js" ></script>
+    <script src="popper/dist/umd/popper.js"></script>
     <%--font-awesome的css引入 字体样式和图标--%>
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <%--bootstrap的js和css引入--%>
@@ -38,6 +38,7 @@
     <%-- dropdown的js引入  dropdown插件--%>
     <script src="js/util.js" type="text/javascript"></script>
     <script src="js/dropdown.js" type="text/javascript"></script>
+
     <%--左侧菜单栏折叠使用的样式--%>
     <style type="text/css">
         #content
