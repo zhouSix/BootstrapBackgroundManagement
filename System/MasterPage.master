@@ -146,7 +146,7 @@
                                         <li><a href="SysUserManage1.aspx">管理员列表</a></li>
                                         <li><a href="#">首页页面设置<span class="fa arrow"></span></a>
                                             <ul>
-                                                <li><a href="SysIndexPage_Manage1.aspx?cid=0">列表信息</a></li>
+                                                <li><a href="SysIndexPage_Manage1.aspx?Cid=0">列表信息</a></li>
                                             </ul>
                                         </li>
                                     </ul>

@@ -29,6 +29,7 @@
                 <i class="glyphicon glyphicon-home"></i><a href="/BootstrapBackgroundManagement/System/Default1.aspx">
                     首页</a></h3>
         </li>
+        <li><b>系统管理</b></li>
         <li><b>首页页面设置</b> </li>
         <li class="active">首页设置列表信息</li>
     </ul>
@@ -49,11 +50,7 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 150px;">
                             <span id="dropdownMenu2">请选择类别</span> <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li><a onclick="shows1($(this).text())" href="#">Java</a> </li>
-                            <li><a onclick="shows1($(this).text())" href="#">数据挖掘</a> </li>
-                            <li><a onclick="shows1($(this).text())" href="#">数据通信/网络</a> </li>
-                            <li><a onclick="shows1($(this).text())" href="#">分离的链接</a> </li>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="ddmUlHtml">
                         </ul>
                     </div>
                 </div>
@@ -75,20 +72,15 @@
             <div class="col-md-12" style="background-color: #dedef8; box-shadow: inset 1px -1px 1px #ddd, inset -1px 1px 1px #ddd;
                 font-size: 16; line-height: 45px; margin-top: 10px;">
                 首页设置列表
-                <%--<button type="button" class="btn btn-default" style="margin-left: 60px" data-toggle="modal"
-                    data-target="#myAddUser">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加信息
-                </button>--%>
             </div>
             <div id="toolbar" class="btn-group">
                 <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#myAddIndexInfo">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
                 </button>
-                <button id="btn_edit" type="button" class="btn btn-default" data-toggle="modal" data-target="#myUpdateIndexInfo">
+                <button id="btn_edit" type="button" class="btn btn-default" onclick="Update_Info()">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
                 </button>
-                <button id="btn_delete" type="button" class="btn btn-default" data-toggle="modal"
-                    data-target="#myDeleteIndexInfo">
+                <button id="btn_delete" type="button" class="btn btn-default" onclick="Delete_Info()">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
                 </button>
             </div>
@@ -118,7 +110,7 @@
                                 </td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="Text0" placeholder="100" />
+                                        <input type="text" class="form-control" id="txtSortId" placeholder="100" />
                                     </div>
                                 </td>
                             </tr>
@@ -128,7 +120,7 @@
                                 </td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="Text1" style="width: 400px;" />
+                                        <input type="text" class="form-control" id="txtTitle" style="width: 400px;" />
                                     </div>
                                 </td>
                             </tr>
@@ -138,7 +130,7 @@
                                 </td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="Text2" style="width: 400px;" />
+                                        <input type="text" class="form-control" id="txtPagekeyw" style="width: 400px;" />
                                     </div>
                                 </td>
                             </tr>
@@ -148,7 +140,7 @@
                                 </td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="Text3" style="width: 400px;" />
+                                        <input type="text" class="form-control" id="txtPagedesc" style="width: 400px;" />
                                     </div>
                                 </td>
                             </tr>
@@ -158,7 +150,14 @@
                                 </td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="Text4" />
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-default dropdown-toggle" id="drpdCate" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="true" style="width: 150px;">
+                                                <span id="spnDrpdCate">请选择类别</span> <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="drpdCate" id="drpdUlCate">
+                                            </ul>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -191,7 +190,7 @@
                                 </td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="Text7" style="width: 400px;" />
+                                        <input type="text" class="form-control" id="txtAbstract" style="width: 400px;" />
                                     </div>
                                 </td>
                             </tr>
@@ -221,26 +220,329 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         关闭
                     </button>
-                    <button type="button" class="btn btn-primary" onclick="addIndexInfo()">
+                    <button type="button" class="btn btn-primary" onclick="AddIndexInfo()">
                         添加
                     </button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- 模态框（Modal）- 修改信息(myUpdateIndexInfo) -->
+    <div class="modal fade" id="myUpdateIndexInfo" tabindex="-1" role="dialog" aria-labelledby="myUpdateIndexInfo"
+        aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        修改信息
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-bordered">
+                        <tbody>
+                            <tr>
+                                <td style="width: 180px;">
+                                    优先级别：
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="txt_update_sortid" placeholder="100" />
+                                        <input type="hidden" id="hid_update_id" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    信息标题：
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="txt_update_title" style="width: 400px;" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    SEO关键字：
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="txt_update_pagekeyw" style="width: 400px;" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    SEO描述：
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="txt_update_pagedesc" style="width: 400px;" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    所属栏目：
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-default dropdown-toggle" id="drp_update_menu"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 150px;">
+                                                <span id="spn_update_drpmenu">请选择类别</span> <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="drop_update_menu" id="ul_update_drpmenu">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    缩略图地址：
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="txt_update_picpath" style="width: 400px;" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    上传缩略图：
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="file-loading">
+                                            <input id="img_file_update" type="file" multiple class="file" data-overwrite-initial="false"
+                                                data-min-file-count="1" data-theme="fas">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    信息摘要：
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="txt_update_abstract" style="width: 400px;" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    信息内容（PC）：<br />
+                                    按回车键是增加段落<br />
+                                    按Shift + Enter 是换行
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="summernote" id="txt_update_info">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="update_prompt" class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                            &times;
+                        </button>
+                        错误！请进行一些更改。
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="UpdateIndexInfo()">
+                        添加
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 模态框   信息删除确认-->
+    <div class="modal fade" id="myDeleteIndexInfo" tabindex="-1" role="dialog" aria-labelledby="myDeleteIndexInfo"
+        aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        提示</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 隐藏需要删除的id -->
+                    <input type="hidden" id="deleteInfoId" name="deleteInfoId" value="" />
+                    <p>
+                        您确认要删除该条信息吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        取消</button>
+                    <button type="button" class="btn btn-primary" id="deleteHaulBtn" onclick="DeleteIndexInfo()">
+                        确认</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <script type="text/javascript">
+        //选择类别下拉框数据选择
         function shows1(a) {
             $('#dropdownMenu2').text(a)
         }
+        //新增界面所属栏目下拉框数据选择
+        function showCates(a) {
+            $('#spnDrpdCate').text(a)
+        }
+        //修改界面所属栏目下拉框数据选择
+        function show_update_cates(a) {
+            $('#spn_update_drpmenu').text(a)
+        }
 
+        var parentId = "";
+
+        //页面加载时获取url传进来的参数，绑定类别下拉菜单，绑定表格数据
         $(function () {
-            initTable();
+            parentId = getQueryString("Cid");
+
+            BindDdmHtml(parentId);
+
+            initTable("-1");
         });
 
+        //绑定类别下拉菜单
+        function BindDdmHtml(parentId) {
+            //获取要传递的参数
+            var model = new Object();
+            model.action = "searchDropMenuList";
+            model.cid = parentId;
+            //将信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": dataInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrorCode == "0") {
+                        $("#ddmUlHtml").html(data.ErrorMsg);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                }
+            });
+        }
+
+        //绑定新增界面栏目下拉菜单
+        function BindCateDrpHtml(parentId) {
+            //获取要传递的参数
+            var model = new Object();
+            model.action = "searchCateDropMenuList";
+            model.cid = parentId;
+            //将信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": dataInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrorCode == "0") {
+                        $("#drpdUlCate").html(data.ErrorMsg);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                }
+            });
+        }
+
+        function Bind_Update_CateDrpHtml(parentId) {
+            //获取要传递的参数
+            var model = new Object();
+            model.action = "searchUpdateCateDropMenuList";
+            model.cid = parentId;
+            //将信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": dataInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrorCode == "0") {
+                        $("#ul_update_drpmenu").html(data.ErrorMsg);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                }
+            });
+        }
+
+
+        //类别下拉菜单选择时变更表格数据
+        $("#dropdownMenu2").bind('DOMNodeInserted', function (e) {
+            refreshTable();
+        });
+
+        //刷新表格信息
+        function refreshTable() {
+            var menuName = $('#dropdownMenu2').text();
+            //获取要传递的参数
+            var model = new Object();
+            model.action = "getTableIdBySortName";
+            model.sortname = menuName;
+            //将信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": dataInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrorCode == "0") {
+                        var cid = data.ErrorMsg;
+                        if ($('#dropdownMenu2').text().indexOf("首页") != -1) {
+                            $("#table").bootstrapTable('refresh', { 'url': "/BootstrapBackgroundManagement/System/Ashx/TableIndexList.ashx?action=GetIndexListJson&cid=" + cid });
+                        }
+                        else {
+                            $("#table").bootstrapTable('refresh', { 'url': "/BootstrapBackgroundManagement/System/Ashx/TableIndexList.ashx?action=GetIndexListJson&cid=-1" });
+                        }
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                }
+            });
+
+            //            if ($('#dropdownMenu2').text().indexOf("首页") != -1) {
+            //                $("#table").bootstrapTable('refresh', { 'url': "/BootstrapBackgroundManagement/System/Ashx/TableIndexList.ashx?action=GetIndexListJson&cid=0" });
+            //            }
+            //            else {
+            //                $("#table").bootstrapTable('refresh', { 'url': "/BootstrapBackgroundManagement/System/Ashx/TableIndexList.ashx?action=GetIndexListJson&cid=-1" });
+            //            }
+        }
+
         //初始化表格数据
-        function initTable() {
+        function initTable(Cid) {
             $('#table').bootstrapTable({
-                url: "/BootstrapBackgroundManagement/System/Ashx/TableIndexList.ashx?action=GetIndexListJson",
+                url: "/BootstrapBackgroundManagement/System/Ashx/TableIndexList.ashx?action=GetIndexListJson&cid=" + Cid,
                 //请求方法
                 method: 'get',
                 toolbar: '#toolbar',                //工具按钮用哪个容器
@@ -347,11 +649,126 @@
         //新增用户,弹窗前隐藏错误提示
         $('#myAddIndexInfo').on('show.bs.modal', function (event) {
             $("#prompt").hide();
+            BindCateDrpHtml(parentId);
         });
+
+        //修改用户,弹窗前隐藏错误提示
+        $('#myUpdateIndexInfo').on('show.bs.modal', function (event) {
+            $("#update_prompt").hide();
+            //判断隐藏input是否被赋值，没有赋值则是表格内编辑点击操作
+            if ($("#hid_update_id").val() == "") {
+                var button = $(event.relatedTarget);
+                //获取要操作的ID
+                var id = button.data('id');
+                //将获取的id,绑定到隐藏的input值中 
+                $("#hid_update_id").val(id);
+            }
+            Bind_Update_CateDrpHtml(parentId);
+
+            //获取要传递的参数
+            var model = new Object();
+            model.action = "searchIndexSetInfo";
+            model.id = $("#hid_update_id").val();
+            //将信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": cateInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Title != "") {
+                        //把要修改的分类名称显示出来
+                        $("#txt_update_sortid").val(data.Sortid);
+                        $("#txt_update_title").val(data.Title);
+                        $("#txt_update_pagekeyw").val(data.Pagekeyw);
+                        $("#txt_update_pagedesc").val(data.Pagedesc);
+                        $('#spn_update_drpmenu').text(data.Class_name);
+                        $("#txt_update_picpath").val(data.Picpath);
+                        $("#txt_update_abstract").val(data.Introduction);
+                        $('#txt_update_info').summernote('code', data.Info);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                    //关闭弹窗
+                    $('#myUpdateIndexInfo').modal('hide');
+                    refreshTable();
+                }
+            });
+        });
+
+        $('#myDeleteIndexInfo').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id'); //获取要操作的ID
+            $('#deleteInfoId').val(id);
+        });
+
+        //修改按钮点击事件（表格上的按钮）
+        function Update_Info() {
+            //取表格的选中行数据
+            var arrselections = $("#table").bootstrapTable('getSelections');
+            //判断表格中选中行只能选一行
+            if (arrselections.length <= 0) {
+                pageAlert("操作失败", "请选择有效数据!", "error");
+                return;
+            }
+            else (arrselections.length > 1)
+            {
+                pageAlert("操作失败", "请选择一条有效数据!", "error");
+                return;
+            }
+            //获取选中行的id，并赋值给隐藏的input
+            var updateId = arrselections[0]["id"].toString();
+            $("#hid_update_id").val(updateId);
+        }
+
+        //删除按钮的点击事件（表格上的按钮）
+        function Delete_Info() {
+            var ids = "";
+            //取表格的选中行数据
+            var arrselections = $("#table").bootstrapTable('getSelections');
+            //判断表格中选中行只能选一行
+            if (arrselections.length <= 0) {
+                pageAlert("操作失败", "请选择有效数据!", "error");
+                return;
+            }
+            $.each(arrselections, function (i, item) {
+                if (ids == "") {
+                    ids = item["id"].ToString();
+                }
+                else {
+                    ids += "," + item["id"].ToString();
+                }
+            });
+            $("#deleteInfoId").val(ids);
+        }
 
         //新增用户，关闭对话框之前移除数据
         $("#myAddIndexInfo").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
+            $("#txtSortId").val("");
+            $("#txtTitle").val("");
+            $("#txtPagekeyw").val("");
+            $("#txtPagedesc").val("");
+            $('#spnDrpdCate').text("请选择类别");
+            $("#txtpicpath").val("");
+            $("#txtAbstract").val("");
+            $('#txtInfo').summernote('code', "");
+        });
+
+        //修改用户，关闭对话框之前移除数据
+        $("#myUpdateIndexInfo").on("hidden.bs.modal", function () {
+            $(this).removeData("bs.modal");
+            $("#txtSortId").val("");
+            $("#txtTitle").val("");
+            $("#txtPagekeyw").val("");
+            $("#txtPagedesc").val("");
+            $('#spnDrpdCate').text("请选择类别");
+            $("#txtpicpath").val("");
+            $("#txtAbstract").val("");
+            $('#txtInfo').summernote('code', "");
         });
 
         $("#img_file").fileinput({
@@ -365,12 +782,15 @@
             //allowedFileTypes: ['image', 'video', 'flash'],
         });
 
-
-         //上传文件
-        $("#img_file").fileinput("upload");
+        //选择文件后立即执行（fileselect：单个文件，filebatchselected：多个文件）
+        $('#img_file').on('fileselect', function (event, files) {
+            $('#img_file').fileinput('upload'); //上传操作
+        });
+        //上传文件
+        //$("#img_file").fileinput("upload");
         //上传失败处理
         $("#img_file").on("fileerror",
-        function(event, data, msg) {
+        function (event, data, msg) {
             pageAlert("上传失败", msg, "error");
         });
         //上传成功处理
@@ -381,5 +801,159 @@
             $("#img_file").fileinput("clear");
         });
 
+        $("#img_file_update").fileinput({
+            language: 'zh', //设置语言
+            theme: 'fas',
+            uploadUrl: 'Ashx/UploadFile.ashx', //上传的地址
+            allowedFileExtensions: ['jpg', 'png', 'gif'], //接收的文件后缀,
+            overwriteInitial: true,
+            maxFileSize: 1000,
+            maxFilesNum: 10
+            //allowedFileTypes: ['image', 'video', 'flash'],
+        });
+
+        //选择文件后立即执行（fileselect：单个文件，filebatchselected：多个文件）
+        $('#img_file_update').on('fileselect', function (event, files) {
+            $('#img_file_update').fileinput('upload'); //上传操作
+        });
+        //上传文件
+        //$("#img_file").fileinput("upload");
+        //上传失败处理
+        $("#img_file_update").on("fileerror",
+        function (event, data, msg) {
+            pageAlert("上传失败", msg, "error");
+        });
+        //上传成功处理
+        $("#img_file_update").on("fileuploaded",
+        function (event, data, previewId, index) {
+            var result = data.response; //接收后台返回的数据
+            $("#txt_update_picpath").val(result.Url);
+            $("#img_file_update").fileinput("clear");
+        });
+
+        //错误提示
+        function PromptText(text) {
+            var $b = $('#prompt').find('button');
+            $('#prompt').html($b);
+            $b.after(text);
+        }
+
+        //新增首页设置
+        function AddIndexInfo() {
+            if ($("#txtSortId").val() == "") {
+                $("#txtSortId").parent(".input-group").addClass("has-error");
+                $("#prompt").show();
+                PromptText("优先级别不能为空！");
+                return;
+            } else {
+                $("#txtSortId").parent(".input-group").removeClass("has-error");
+                $("#prompt").hide();
+            }
+            if ($("#txtTitle").val() == "") {
+                $("#txtTitle").parent(".input-group").addClass("has-error");
+                $("#prompt").show();
+                PromptText("优先级别不能为空！");
+                return;
+            } else {
+                $("#txtTitle").parent(".input-group").removeClass("has-error");
+                $("#prompt").hide();
+            }
+            if ($('#spnDrpdCate').text() == "请选择类别") {
+                $("#spnDrpdCate").parent(".input-group").addClass("has-error");
+                $("#prompt").show();
+                PromptText("请选择类别！");
+                return;
+            } else {
+                $("#spnDrpdCate").parent(".input-group").removeClass("has-error");
+                $("#prompt").hide();
+            }
+
+            var model = new Object();
+            model.action = "addIndexSetInfo";
+            model.sortid = $("#txtSortId").val();
+            model.title = $("#txtTitle").val();
+            model.pagekeyw = $("#txtPagekeyw").val();
+            model.pagedesc = $("#txtPagedesc").val();
+            model.class_name = $('#spnDrpdCate').text();
+            model.picpath = $("#txtpicpath").val();
+            model.abstract = $("#txtAbstract").val();
+            model.info = $('#txtInfo').summernote('code');
+
+            //将首页设置信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+            //提交首页设置，进行保存
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": dataInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrorCode == "0") {
+                        pageAlert("添加成功", "保存成功!", "success");
+                    } else {
+                        pageAlert("添加失败", data.ErrorMsg, "error");
+                    }
+                    //刷新数据
+                    refreshTable();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("添加失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                    //刷新数据
+                    refreshTable();
+                }
+            });
+        }
+
+        //修改首页设置
+        function UpdateIndexInfo() {
+            //获取要修改的参数
+            var model = new Object();
+            model.action = "updateIndexSetInfo";
+            model.id = $("#hid_update_id").val();
+            model.sortid = $("#txtSortId").val();
+            model.title = $("#txtTitle").val();
+            model.pagekeyw = $("#txtPagekeyw").val();
+            model.pagedesc = $("#txtPagedesc").val();
+            model.class_name = $('#spnDrpdCate').text();
+            model.picpath = $("#txtpicpath").val();
+            model.abstract = $("#txtAbstract").val();
+            model.info = $('#txtInfo').summernote('code');
+            //将首页设置信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+            //提交首页设置，进行修改保存
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": dataInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrorCode == "0") {
+                        pageAlert("修改成功", "修改成功!", "success");
+                    } else {
+                        pageAlert("修改失败", data.ErrorMsg, "error");
+                    }
+                    //刷新数据
+                    refreshTable();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("修改失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                    //刷新数据
+                    refreshTable();
+                }
+            });
+        }
+
+        //删除首页设置
+        function DeleteIndexInfo() {
+            
+        }
+
+        //获取url中传递的参数
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        } 
     </script>
 </asp:Content>

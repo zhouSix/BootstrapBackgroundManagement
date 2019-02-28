@@ -109,7 +109,7 @@
             });
         }
 
-        //
+        //保存网站参数
         function SaveWebInfo() {
             var obj = new Object();
             obj.action = "saveSiteParamInfo";
