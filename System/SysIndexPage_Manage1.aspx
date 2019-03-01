@@ -361,7 +361,7 @@
                         关闭
                     </button>
                     <button type="button" class="btn btn-primary" onclick="UpdateIndexInfo()">
-                        添加
+                        保存
                     </button>
                 </div>
             </div>
@@ -381,7 +381,7 @@
                 </div>
                 <div class="modal-body">
                     <!-- 隐藏需要删除的id -->
-                    <input type="hidden" id="deleteInfoId" name="deleteInfoId" value="" />
+                    <input type="hidden" id="deleteInfoId" />
                     <p>
                         您确认要删除该条信息吗？</p>
                 </div>
@@ -675,7 +675,7 @@
             $.ajax({
                 type: "post",
                 url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
-                data: { "data": cateInfo },
+                data: { "data": dataInfo },
                 dataType: "json",
                 success: function (data) {
                     if (data.Title != "") {
@@ -700,9 +700,12 @@
         });
 
         $('#myDeleteIndexInfo').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var id = button.data('id'); //获取要操作的ID
-            $('#deleteInfoId').val(id);
+            //判断隐藏input是否被赋值，没有赋值则是表格内编辑点击操作
+            if ($("#deleteInfoId").val() == "") {
+                var button = $(event.relatedTarget);
+                var id = button.data('id'); //获取要操作的ID
+                $('#deleteInfoId').val(id);
+            }
         });
 
         //修改按钮点击事件（表格上的按钮）
@@ -714,7 +717,7 @@
                 pageAlert("操作失败", "请选择有效数据!", "error");
                 return;
             }
-            else (arrselections.length > 1)
+            else if(arrselections.length > 1)
             {
                 pageAlert("操作失败", "请选择一条有效数据!", "error");
                 return;
@@ -722,6 +725,8 @@
             //获取选中行的id，并赋值给隐藏的input
             var updateId = arrselections[0]["id"].toString();
             $("#hid_update_id").val(updateId);
+            //展示修改界面
+            $("#myUpdateIndexInfo").modal('show');
         }
 
         //删除按钮的点击事件（表格上的按钮）
@@ -736,13 +741,16 @@
             }
             $.each(arrselections, function (i, item) {
                 if (ids == "") {
-                    ids = item["id"].ToString();
+                    ids = item.id;
                 }
                 else {
-                    ids += "," + item["id"].ToString();
+                    ids += "," + item.id;
                 }
             });
-            $("#deleteInfoId").val(ids);
+            var id = ids;
+            $('#deleteInfoId').val(id);
+            //展示删除界面
+            $("#myDeleteIndexInfo").modal('show');
         }
 
         //新增用户，关闭对话框之前移除数据
@@ -761,6 +769,7 @@
         //修改用户，关闭对话框之前移除数据
         $("#myUpdateIndexInfo").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
+            $("#hid_update_id").val("");
             $("#txtSortId").val("");
             $("#txtTitle").val("");
             $("#txtPagekeyw").val("");
@@ -769,6 +778,13 @@
             $("#txtpicpath").val("");
             $("#txtAbstract").val("");
             $('#txtInfo').summernote('code', "");
+        });
+
+        //修改用户，关闭对话框之前移除数据
+        $("#myDeleteIndexInfo").on("hidden.bs.modal", function () {
+            $(this).removeData("bs.modal");
+            $("#deleteInfoId").val("");
+            
         });
 
         $("#img_file").fileinput({
@@ -893,11 +909,15 @@
                     } else {
                         pageAlert("添加失败", data.ErrorMsg, "error");
                     }
+                    //关闭弹窗
+                    $('#myAddIndexInfo').modal('hide');
                     //刷新数据
                     refreshTable();
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     pageAlert("添加失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                    //关闭弹窗
+                    $('#myAddIndexInfo').modal('hide');
                     //刷新数据
                     refreshTable();
                 }
@@ -910,14 +930,14 @@
             var model = new Object();
             model.action = "updateIndexSetInfo";
             model.id = $("#hid_update_id").val();
-            model.sortid = $("#txtSortId").val();
-            model.title = $("#txtTitle").val();
-            model.pagekeyw = $("#txtPagekeyw").val();
-            model.pagedesc = $("#txtPagedesc").val();
-            model.class_name = $('#spnDrpdCate').text();
-            model.picpath = $("#txtpicpath").val();
-            model.abstract = $("#txtAbstract").val();
-            model.info = $('#txtInfo').summernote('code');
+            model.sortid = $("#txt_update_sortid").val();
+            model.title = $("#txt_update_title").val();
+            model.pagekeyw = $("#txt_update_pagekeyw").val();
+            model.pagedesc = $("#txt_update_pagedesc").val();
+            model.class_name = $('#spn_update_drpmenu').text();
+            model.picpath = $("#txt_update_picpath").val();
+            model.abstract = $("#txt_update_abstract").val();
+            model.info = $('#txt_update_info').summernote('code');
             //将首页设置信息转换成json数据
             var dataInfo = JSON.stringify(model);
             //提交首页设置，进行修改保存
@@ -932,11 +952,15 @@
                     } else {
                         pageAlert("修改失败", data.ErrorMsg, "error");
                     }
+                    //关闭弹窗
+                    $('#myUpdateIndexInfo').modal('hide');
                     //刷新数据
                     refreshTable();
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     pageAlert("修改失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                    //关闭弹窗
+                    $('#myUpdateIndexInfo').modal('hide');
                     //刷新数据
                     refreshTable();
                 }
@@ -945,7 +969,35 @@
 
         //删除首页设置
         function DeleteIndexInfo() {
-            
+            var model = new Object();
+            //获取要删除的id
+            model.id = $('#deleteInfoId').val();
+            model.action = "deleteIndexInfo";
+            //将信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+            //提交网站参数，进行删除
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                data: { "data": dataInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrorCode == "0") {
+                        pageAlert("操作成功", "删除成功!", "success");
+                    } else {
+                        pageAlert("操作失败", data.ErrorMsg, "error");
+                    }
+                    //关闭弹窗
+                    $('#myDeleteIndexInfo').modal('hide');
+                    refreshTable();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                    //关闭弹窗
+                    $('#myDeleteIndexInfo').modal('hide');
+                    refreshTable();
+                }
+            });
         }
 
         //获取url中传递的参数

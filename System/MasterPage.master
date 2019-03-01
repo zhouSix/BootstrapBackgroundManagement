@@ -154,8 +154,7 @@
                                 <li>
                                     <a href="#">友情链接<span class="fa arrow"></span></a>
                                     <ul>
-                                        <li><a href="#">添加信息</a></li>
-                                        <li><a href="#">列表信息</a></li>
+                                        <li><a href="FriendLink_Manage1.aspx">列表信息</a></li>
                                     </ul>
                                 </li>
                                 <%--<li><a href="#">关于系统 </a></li>--%>

@@ -78,6 +78,9 @@ public class SystemManage : IHttpHandler
             case "updateIndexSetInfo":     //修改首页设置
                 UpdateIndexSetInfo(context, jsonData);
                 break;
+            case "deleteIndexInfo":        //删除首页设置
+                DeleteIndexInfo(context, jsonData);
+                break;
         }
     }
 
@@ -1009,7 +1012,13 @@ public class SystemManage : IHttpHandler
     } 
     #endregion
 
-    private void UpdateIndexSetInfo(HttpContext context, JsonData jsonData) 
+    #region 修改首页设置参数
+    /// <summary>
+    /// 修改首页设置参数
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="jsonData"></param>
+    private void UpdateIndexSetInfo(HttpContext context, JsonData jsonData)
     {
         //获取页面传进来的参数
         ParamInfo pInfo = new ParamInfo();
@@ -1030,7 +1039,7 @@ public class SystemManage : IHttpHandler
 
         try
         {
-         //根据分类名称查询分类id和分类路径
+            //根据分类名称查询分类id和分类路径
             strSql = "select * from news_class where sort_name='" + pInfo.Class_name + "'";
             DataTable dt = GB.AccessbHelper.ExecuteDataTable(strSql);
             //根据查询到的表格数据，判断是否查询到分类信息；否则没有查到分类信息
@@ -1042,7 +1051,7 @@ public class SystemManage : IHttpHandler
 
                 //修改数据sql
                 strSql = "update news set title=@title,class_id=@class_id,info=@info,news_path=@news_path,newsstate=@newsstate,ispic=@ispic,picpath=@picpath,infofrom=@infofrom,pagekeyw=@pagekeyw,pagedesc=@pagedesc,abstract=@abstract,sortid=@sortid,isindex=@isindex,isjp=@isjp,ists=@ists,weburl=@weburl,titlesize=@titlesize,indexsort=@indexsort where id=@id";
-                OleDbParameter[] param = new OleDbParameter[18];
+                OleDbParameter[] param = new OleDbParameter[19];
                 param[0] = new OleDbParameter("@title", pInfo.Title);
                 param[1] = new OleDbParameter("@class_id", pInfo.Class_id);
                 param[2] = new OleDbParameter("@info", pInfo.Info);
@@ -1061,6 +1070,7 @@ public class SystemManage : IHttpHandler
                 param[15] = new OleDbParameter("@weburl", "");
                 param[16] = new OleDbParameter("@titlesize", "14");
                 param[17] = new OleDbParameter("@indexsort", pInfo.Sortid);
+                param[18] = new OleDbParameter("@id", pInfo.Id);
                 result = GB.AccessbHelper.ExecuteNonQuery(strSql, param);
                 if (result > 0)
                 {
@@ -1090,7 +1100,49 @@ public class SystemManage : IHttpHandler
         }
         //对象转为json，返回页面
         context.Response.Write(JsonMapper.ToJson(error));
-    }
+    } 
+    #endregion
+
+    #region 删除首页设置
+    /// <summary>
+    /// 删除首页设置
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="jsonData"></param>
+    private void DeleteIndexInfo(HttpContext context, JsonData jsonData)
+    {
+        //获取页面传进来的要删除的首页设置id
+        string ids = jsonData["id"].ToString();
+
+        Error error = new Error();
+        int result = 0;
+        string strSql = "";
+        try
+        {
+            strSql = "Delete from news where id in(" + ids + ")";
+            result = GB.AccessbHelper.ExecuteNonQuery(strSql);
+            if (result > 0)
+            {
+                //用户密码修改成功
+                error.ErrorCode = "0";
+            }
+            else
+            {
+                //密码修改失败
+                error.ErrorCode = "1";
+                error.ErrorMsg = "删除失败！";
+            }
+        }
+        catch (Exception ex)
+        {
+            //sql异常，异常原因
+            error.ErrorCode = "1";
+            error.ErrorMsg = ex.Message;
+        }
+        //对象转为json，返回页面
+        context.Response.Write(JsonMapper.ToJson(error));
+    } 
+    #endregion
     
     public bool IsReusable
     {
