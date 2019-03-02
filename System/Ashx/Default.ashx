@@ -146,8 +146,7 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
             }
             else
             {
-                sb.Append(@"<ul id='"+parentId+"' class='nav nav-list collapse secondmenu' style='height: 0px;'>");
-                sb.Append("<li><a href='#'>添加信息</a></li>");//icon-edit
+                sb.Append(@"<ul id='" + parentId + "' class='nav nav-list collapse secondmenu' style='height: 0px;'>");
                 sb.Append("<li><a href='#'>列表信息</a></li>");//icon-list
                 sb.Append("</ul>");
             }
@@ -182,14 +181,13 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
             else
             {
                 sb.Append("<ul id='" + parentId + "' class='nav nav-list collapse thirdmenu' style='height: 0px;'>");
-                sb.Append("<li><a href='#'>添加信息</a></li>");
                 sb.Append("<li><a href='#'>列表信息</a></li>");
                 sb.Append("</ul>");
             }
             sb.Append("</li>");
         }
         sb.Append("</ul>");
-    } 
+    }
     #endregion
 
     #region 导航栏menu的html字符串 方法二
@@ -218,8 +216,7 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
             else
             {
                 sb.Append(@"<ul>");
-                sb.Append("<li><a href='#'>添加信息</a></li>");//icon-edit
-                sb.Append("<li><a href='#'>列表信息</a></li>");//icon-list
+                sb.Append("<li><a href='SysManage_List1.aspx?Cid=" + parentId + "'>列表信息</a></li>");
                 sb.Append("</ul>");
             }
             sb.Append("</li>");
@@ -253,14 +250,13 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
             else
             {
                 sb.Append("<ul>");
-                sb.Append("<li><a href='#'>添加信息</a></li>");
-                sb.Append("<li><a href='#'>列表信息</a></li>");
+                sb.Append("<li><a href='SysManage_List1.aspx?Cid=" + parentId + "'>列表信息</a></li>");
                 sb.Append("</ul>");
             }
             sb.Append("</li>");
         }
         sb.Append("</ul>");
-    }  
+    }
     #endregion
 
     #region 得到服务器信息
@@ -283,7 +279,7 @@ public class Default : IHttpHandler, System.Web.SessionState.IRequiresSessionSta
         context.Response.Write(result);
     }
     #endregion
-    
+
     public bool IsReusable
     {
         get

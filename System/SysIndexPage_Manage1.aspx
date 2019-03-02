@@ -646,13 +646,13 @@
             });
         }
 
-        //新增用户,弹窗前隐藏错误提示
+        //新增首页设置,弹窗前隐藏错误提示
         $('#myAddIndexInfo').on('show.bs.modal', function (event) {
             $("#prompt").hide();
             BindCateDrpHtml(parentId);
         });
 
-        //修改用户,弹窗前隐藏错误提示
+        //修改首页设置,弹窗前隐藏错误提示
         $('#myUpdateIndexInfo').on('show.bs.modal', function (event) {
             $("#update_prompt").hide();
             //判断隐藏input是否被赋值，没有赋值则是表格内编辑点击操作
@@ -699,6 +699,7 @@
             });
         });
 
+        //删除首页设置,弹窗前获取要删除行的id
         $('#myDeleteIndexInfo').on('show.bs.modal', function (event) {
             //判断隐藏input是否被赋值，没有赋值则是表格内编辑点击操作
             if ($("#deleteInfoId").val() == "") {
