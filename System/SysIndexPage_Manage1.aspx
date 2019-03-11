@@ -41,7 +41,7 @@
                 </button>
                 <i class="glyphicon glyphicon-warning-sign"></i>首页设置提示（注意：！）
             </div>
-            <div class="col-md-3" style="font-size: 16; line-height: 36px;">
+            <div class="col-md-4" style="font-size: 16; line-height: 36px;">
                 <div class="col-md-3">
                     请选择：</div>
                 <div class="col-md-9">
@@ -55,7 +55,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3" style="font-size: 16; line-height: 36px;">
+            <div class="col-md-4" style="font-size: 16; line-height: 36px;">
                 <div class="col-md-3">
                     关键字：</div>
                 <div class="col-md-9">
@@ -771,14 +771,14 @@
         $("#myUpdateIndexInfo").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
             $("#hid_update_id").val("");
-            $("#txtSortId").val("");
-            $("#txtTitle").val("");
-            $("#txtPagekeyw").val("");
-            $("#txtPagedesc").val("");
-            $('#spnDrpdCate').text("请选择类别");
-            $("#txtpicpath").val("");
-            $("#txtAbstract").val("");
-            $('#txtInfo').summernote('code', "");
+            $("#txt_update_sortid").val("");
+            $("#txt_update_title").val("");
+            $("#txt_update_pagekeyw").val("");
+            $("#txt_update_pagedesc").val("");
+            $('#spn_update_drpmenu').text("请选择类别");
+            $("#txt_update_picpath").val("");
+            $("#txt_update_abstract").val("");
+            $('#txt_update_info').summernote('code', "");
         });
 
         //修改用户，关闭对话框之前移除数据

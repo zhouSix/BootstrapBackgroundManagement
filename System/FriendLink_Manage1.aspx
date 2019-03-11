@@ -22,7 +22,7 @@
                 </button>
                 <i class="glyphicon glyphicon-warning-sign"></i>友情连接提示（注意：！）
             </div>
-            <div class="col-md-3" style="font-size: 16; line-height: 36px;">
+            <div class="col-md-4" style="font-size: 16; line-height: 36px;">
                 <div class="col-md-4">
                     链接标题：</div>
                 <div class="col-md-8">
