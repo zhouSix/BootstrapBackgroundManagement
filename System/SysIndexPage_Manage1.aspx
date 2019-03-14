@@ -781,7 +781,7 @@
             $('#txt_update_info').summernote('code', "");
         });
 
-        //修改用户，关闭对话框之前移除数据
+        //删除用户，关闭对话框之前移除数据
         $("#myDeleteIndexInfo").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
             $("#deleteInfoId").val("");

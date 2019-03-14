@@ -1076,13 +1076,13 @@ public class SystemManage : IHttpHandler
                 {
                     //插入成功
                     error.ErrorCode = "0";
-                    error.ErrorMsg = "数据插入成功！";
+                    error.ErrorMsg = "数据修改成功！";
                 }
                 else
                 {
                     //插入失败
                     error.ErrorCode = "1";
-                    error.ErrorMsg = "数据插入失败！";
+                    error.ErrorMsg = "数据修改失败！";
                 }
             }
             else

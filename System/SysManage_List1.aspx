@@ -254,7 +254,7 @@
             </div>
         </div>
     </div>
-    <!-- 模态框（Modal）- 新增信息(myUpdatePageMessageInfo) -->
+    <!-- 模态框（Modal）- 修改信息(myUpdatePageMessageInfo) -->
     <div class="modal fade" id="myUpdatePageMessageInfo" tabindex="-1" role="dialog"
         aria-labelledby="myUpdatePageMessageInfo" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-lg">
@@ -264,7 +264,7 @@
                         &times;
                     </button>
                     <h4 class="modal-title" id="myModalLabel">
-                        新增信息
+                        修改信息
                     </h4>
                 </div>
                 <div class="modal-body">
@@ -391,7 +391,7 @@
                                 <td>
                                     <div class="input-group">
                                         <label class="radio-inline">
-                                            <input type="radio" name="update_yesOrNoRdoinline" id="update_rdoYesOrNo1" value="否"
+                                            <input type="radio" name="update_yesornoRdoinline" id="update_rdoYesOrNo1" value="否"
                                                 checked>
                                             否
                                         </label>
@@ -416,11 +416,40 @@
                         关闭
                     </button>
                     <button type="button" class="btn btn-primary" onclick="Update_Page_Msg_Info()">
-                        添加
+                        修改
                     </button>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- 模态框   信息删除确认-->
+    <div class="modal fade" id="myDeletePageMessageInfo" tabindex="-1" role="dialog"
+        aria-labelledby="myDeletePageMessageInfo" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        提示</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 隐藏需要删除的id -->
+                    <input type="hidden" id="deleteInfoId" />
+                    <p>
+                        您确认要删除该条信息吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        取消</button>
+                    <button type="button" class="btn btn-primary" onclick="Delete_Page_Msg_Info()">
+                        确认</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
     <script type="text/javascript">
         var parentId = "";  //获取页面传进来的父级id
@@ -565,7 +594,7 @@
                         //value：当前field的值，即id
                         //row：当前行的数据
                         var isindex = value == "0" ? "否" : "是";
-                        var a = '<a href="javescript:void(0);">' + isindex + '</a>';
+                        var a = '<a href="javascript:void(0);" onclick="ChangeIsIndex(this,' + row["id"] + ')">' + isindex + '</a>';
                         return a;
                     }
                 }, {
@@ -573,7 +602,7 @@
                     title: '编辑',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        var a = '<a href="javescript:void(0);"  data-toggle="modal" data-target="#myUpdatePageMessageInfo" data-id="' + value + '" data-catename="' + row["title"] + '" ><span class="glyphicon glyphicon-pencil"></span>编辑</a>';
+                        var a = '<a href="javascript:void(0);"  data-toggle="modal" data-target="#myUpdatePageMessageInfo" data-id="' + value + '" data-catename="' + row["title"] + '" ><span class="glyphicon glyphicon-pencil"></span>编辑</a>';
                         return a;
                     }
                 }, {
@@ -581,7 +610,7 @@
                     title: '删除',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        var a = '<a href="javescript:void(0);" data-toggle="modal" data-target="#myDeleteIndexInfo" data-id="' + value + '" data-catename="' + row["title"] + '" ><span class="glyphicon glyphicon-remove"></span>删除</a>';
+                        var a = '<a href="javascript:void(0);" data-toggle="modal" data-target="#myDeletePageMessageInfo" data-id="' + value + '" data-catename="' + row["title"] + '" ><span class="glyphicon glyphicon-remove"></span>删除</a>';
                         return a;
                     }
                 }],
@@ -788,24 +817,24 @@
                 //将获取的id,绑定到隐藏的input值中 
                 $("#hid_update_id").val(id);
             }
-            Bind_Update_CateDrpHtml(pID);
+            Bind_Update_CateDrpHtml(parentId);
 
             //获取要传递的参数
             var model = new Object();
-            model.action = "searchIndexSetInfo";
+            model.action = "search_Msg_InfoById";
             model.id = $("#hid_update_id").val();
             //将信息转换成json数据
             var dataInfo = JSON.stringify(model);
 
             $.ajax({
                 type: "post",
-                url: "/BootstrapBackgroundManagement/System/Ashx/SystemManage.ashx",
+                url: "/BootstrapBackgroundManagement/System/Ashx/PageManage.ashx",
                 data: { "data": dataInfo },
                 dataType: "json",
                 success: function (data) {
                     if (data.Title != "") {
                         //把要修改的分类名称显示出来
-                        $("#txt_update_sortid").val(data.Sortid);
+                        $("#txt_update_sortId").val(data.Sortid);
                         $("#txt_update_title").val(data.Title);
                         $("#txt_update_pagekeyw").val(data.Pagekeyw);
                         $("#txt_update_pagedesc").val(data.Pagedesc);
@@ -813,6 +842,13 @@
                         $("#txt_update_picpath").val(data.Picpath);
                         $("#txt_update_abstract").val(data.Introduction);
                         $('#txt_update_info').summernote('code', data.Info);
+                        $("#txt_update_click").val(data.Clicks);
+                        if (data.IsIndex == "0") {
+                            $("#update_rdoYesOrNo1").attr('checked', 'true');
+                        }
+                        else {
+                            $("#update_rdoYesOrNo2").attr('checked', 'true');
+                         }
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -954,6 +990,110 @@
             $("#txt_update_click").val("");
             $('#update_rdoYesOrNo1').attr('checked', true);
         });
+
+        //列表上方删除按钮click事件
+        function Delete_Info() {
+            var ids = "";
+            //取表格的选中行数据
+            var arrselections = $("#table").bootstrapTable('getSelections');
+            //判断表格中选中行只能选一行
+            if (arrselections.length <= 0) {
+                pageAlert("操作失败", "请选择有效数据!", "error");
+                return;
+            }
+            $.each(arrselections, function (i, item) {
+                if (ids == "") {
+                    ids = item.id;
+                }
+                else {
+                    ids += "," + item.id;
+                }
+            });
+            var id = ids;
+            $('#deleteInfoId').val(id);
+            //展示删除界面
+            $("#myDeletePageMessageInfo").modal('show');
+        }
+
+        //删除首页设置,弹窗前获取要删除行的id
+        $('#myDeletePageMessageInfo').on('show.bs.modal', function (event) {
+            //判断隐藏input是否被赋值，没有赋值则是表格内编辑点击操作
+            if ($("#deleteInfoId").val() == "") {
+                var button = $(event.relatedTarget);
+                var id = button.data('id'); //获取要操作的ID
+                $('#deleteInfoId').val(id);
+            }
+        });
+
+        //删除用户，关闭对话框之前移除数据
+        $("#myDeletePageMessageInfo").on("hidden.bs.modal", function () {
+            $(this).removeData("bs.modal");
+            $("#deleteInfoId").val("");
+
+        });
+
+        //删除信息
+        function Delete_Page_Msg_Info() {
+            var model = new Object();
+            //获取要删除的id
+            model.id = $('#deleteInfoId').val();
+            model.action = "delete_Page_Msg_Info";
+            //将信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+            //提交网站参数，进行删除
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/PageManage.ashx",
+                data: { "data": dataInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrorCode == "0") {
+                        pageAlert("操作成功", "删除成功!", "success");
+                    } else {
+                        pageAlert("操作失败", data.ErrorMsg, "error");
+                    }
+                    //关闭弹窗
+                    $('#myDeletePageMessageInfo').modal('hide');
+                    refreshTable();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                    //关闭弹窗
+                    $('#myDeletePageMessageInfo').modal('hide');
+                    refreshTable();
+                }
+            });
+        }
+
+        //刷新表格信息
+        function refreshTable() {
+            $("#table").bootstrapTable('refresh', { 'url': "/BootstrapBackgroundManagement/System/Ashx/PageTableList.ashx?action=GetPageListJson&cid=" + parentId });
+        }
+
+        function ChangeIsIndex(obj, changedId) {
+            //获取要传递的参数
+            var model = new Object();
+            model.action = "change_Msg_IsIndexById";
+            model.id = changedId;
+            model.text = obj.innerText;
+            //将信息转换成json数据
+            var dataInfo = JSON.stringify(model);
+
+            $.ajax({
+                type: "post",
+                url: "/BootstrapBackgroundManagement/System/Ashx/PageManage.ashx",
+                data: { "data": dataInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrorCode == "0") {
+                        obj.innerText = data.ErrorMsg;
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    pageAlert("操作失败", "网络超时，错误信息为" + XMLHttpRequest.status + ",请稍后重试！", "error");
+                }
+            });
+        }
 
         //获取url中传递的参数
         function getQueryString(name) {
